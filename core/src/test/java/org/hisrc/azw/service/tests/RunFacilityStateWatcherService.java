@@ -4,10 +4,8 @@ import java.text.MessageFormat;
 
 import org.hisrc.azw.event.FacilityStateChangedEvent;
 import org.hisrc.azw.event.FacilityStateChangedEventListener;
-import org.hisrc.azw.integration.FacilityDataAccess;
 import org.hisrc.azw.integration.FacilityStateReportDataAccess;
 import org.hisrc.azw.integration.StationDataAccess;
-import org.hisrc.azw.integration.impl.v_1_0.DefaultApiFacilityDataAccess;
 import org.hisrc.azw.integration.impl.v_1_0.DefaultApiFacilityStateReportDataAccess;
 import org.hisrc.azw.integration.impl.v_1_0.DefaultApiStationDataAccess;
 import org.hisrc.azw.service.FacilityService;
