@@ -42,6 +42,7 @@
 	</dependencies>
 	<properties>
 		<dbeac.version>1.0.0</dbeac.version>
+		<camel.version>2.16.1</camel.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -64,6 +65,21 @@
 				<groupId>org.hisrc.dbeac</groupId>
 				<artifactId>dbeac-client</artifactId>
 				<version>${dbeac.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-twitter</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.vividsolutions</groupId>
+				<artifactId>jts</artifactId>
+				<version>1.13</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-collections4</artifactId>
+				<version>4.1</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
