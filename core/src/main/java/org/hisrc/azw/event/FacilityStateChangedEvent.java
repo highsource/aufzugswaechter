@@ -4,21 +4,25 @@ import java.text.MessageFormat;
 import java.util.EventObject;
 
 import org.apache.commons.lang3.Validate;
-import org.hisrc.dbeac.client.v_1_0.model.Facility;
-import org.hisrc.dbeac.client.v_1_0.model.Station;
+import org.hisrc.azw.model.Facility;
+import org.hisrc.azw.model.FacilityStateSnapshot;
+import org.hisrc.azw.model.Station;
 
 public class FacilityStateChangedEvent extends EventObject {
 
 	private static final long serialVersionUID = 2607203168473541899L;
-	private final Facility oldValue;
-	private final Facility newValue;
+	private final Facility facility;
+	private final FacilityStateSnapshot oldSnapshot;
+	private final FacilityStateSnapshot newSnapshot;
 
-	public FacilityStateChangedEvent(Station station, Facility oldValue,
-			Facility newValue) {
+	public FacilityStateChangedEvent(Station station, Facility facility,
+			FacilityStateSnapshot oldSnapshot, FacilityStateSnapshot newSnapshot) {
 		super(Validate.notNull(station));
-		Validate.notNull(newValue);
-		this.oldValue = oldValue;
-		this.newValue = newValue;
+		Validate.notNull(facility);
+		Validate.notNull(newSnapshot);
+		this.facility = facility;
+		this.oldSnapshot = oldSnapshot;
+		this.newSnapshot = newSnapshot;
 	}
 
 	@Override
@@ -26,18 +30,24 @@ public class FacilityStateChangedEvent extends EventObject {
 		return (Station) super.getSource();
 	}
 
-	public Facility getOldValue() {
-		return oldValue;
+	public Facility getFacility() {
+		return facility;
 	}
 
-	public Facility getNewValue() {
-		return newValue;
+	public FacilityStateSnapshot getOldSnapshot() {
+		return oldSnapshot;
+	}
+
+	public FacilityStateSnapshot getNewSnapshot() {
+		return newSnapshot;
 	}
 
 	@Override
 	public String toString() {
 		return MessageFormat
-				.format("FacilityStateChangedEvent [station ={0}, oldValue={1}, newValue={2}]",
-						getSource(), oldValue, newValue);
+				.format("FacilityStateChangedEvent [station={0}, facility={1}, oldSnapshot={2}, newSnapshot={3}]",
+						getSource(), getFacility(), getOldSnapshot(),
+						getNewSnapshot());
 	}
+
 }
