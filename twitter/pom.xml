@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.hisrc.aufzugswaechter</groupId>
+	<artifactId>aufzugswaechter-twitter</artifactId>
+	<packaging>jar</packaging>
+	<name>Aufzugswaechter - Twitter</name>
+	<parent>
+		<groupId>org.hisrc.aufzugswaechter</groupId>
+		<artifactId>aufzugswaechter-project</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<dependencies>
+		<dependency>
+			<groupId>org.hisrc.aufzugswaechter</groupId>
+			<artifactId>aufzugswaechter-twitter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-twitter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>${aws-java-sdk.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+	</build>
+</project>
