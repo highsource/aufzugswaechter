@@ -9,6 +9,9 @@ import com.vividsolutions.jts.geom.Point;
 
 public class Facility implements Serializable {
 
+	public static Facility UNKNOWN = new Facility(-1L, FacilityType.ELEVATOR,
+			"<unknown facility>", null, Station.UNKNOWN.getStationnumber());
+
 	private static final long serialVersionUID = -4854190538794980599L;
 	private Long equipmentnumber;
 	private FacilityType type;

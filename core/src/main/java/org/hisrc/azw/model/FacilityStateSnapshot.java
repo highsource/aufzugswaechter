@@ -12,8 +12,8 @@ public class FacilityStateSnapshot implements Serializable {
 	private Long equipmentnumber;
 	private FacilityState state;
 
-	public FacilityStateSnapshot(Long timestamp, Long equipmentnumber,
-			FacilityState state) {
+	public FacilityStateSnapshot(Long equipmentnumber, FacilityState state,
+			Long timestamp) {
 		Validate.notNull(timestamp);
 		Validate.notNull(equipmentnumber);
 		Validate.notNull(state);

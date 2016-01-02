@@ -190,7 +190,7 @@ public class DefaultFacilityStateWatcherService implements
 		}
 
 		final FacilityStateSnapshot newSnapshot = new FacilityStateSnapshot(
-				timestamp, equipmentnumber, report.getFacilityState());
+				equipmentnumber, report.getFacilityState(), timestamp);
 
 		final FacilityStateSnapshot oldSnapshot = getFacilityStateSnapshotService()
 				.findLastByEquipmentnumber(equipmentnumber);
