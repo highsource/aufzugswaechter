@@ -44,8 +44,7 @@
 		map.addLayer(inactiveMarkers);
 		map.addLayer(unknownMarkers);
 
-		// http://api.aufzugswaechter.org/facilities
-		$.getJSON("http://localhost:8080/aufzugswaechter-web/facilities", function(features) {
+		$.getJSON("http://api.aufzugswaechter.org/facilities", function(features) {
 			for (var index = 0; index < features.length; index++)
 			{
 				var feature = features[index];
