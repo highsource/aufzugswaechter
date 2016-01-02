@@ -14,10 +14,10 @@
         http://www.directwebremoting.org/schema/spring-dwr
         http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd">
 
-	<context:component-scan base-package="org.hisrc.aufzugswaechter.controller" />
+	<context:component-scan base-package="org.hisrc.azw.controller" />
 
 	<bean id="jsonHttpMessageConverter"
-		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 		<property name="prefixJson" value="false" />
 		<property name="supportedMediaTypes" value="application/json;charset=UTF-8" />
 	</bean>
@@ -32,6 +32,47 @@
 	</bean>
 
 	<mvc:annotation-driven />
-	<mvc:default-servlet-handler/>
-    <!--  mvc:resources mapping="/" location="/index.html" /-->
+	<mvc:default-servlet-handler />
+	<!-- mvc:resources mapping="/" location="/index.html" / -->
+
+
+	<bean name="org.hisrc.dbeac.client.v_1_0.api.DefaultApi" class="org.hisrc.dbeac.client.v_1_0.api.DefaultApi" />
+
+	<bean name="org.hisrc.azw.integration.StationDataAccess"
+		class="org.hisrc.azw.integration.impl.v_1_0.DefaultApiStationDataAccess">
+		<property name="api" ref="org.hisrc.dbeac.client.v_1_0.api.DefaultApi" />
+	</bean>
+
+	<bean name="org.hisrc.azw.integration.FacilityStateReportDataAccess"
+		class="org.hisrc.azw.integration.impl.v_1_0.DefaultApiFacilityStateReportDataAccess">
+		<property name="api" ref="org.hisrc.dbeac.client.v_1_0.api.DefaultApi" />
+	</bean>
+
+	<bean name="org.hisrc.azw.integration.FacilityService" class="org.hisrc.azw.service.impl.MemoryBasedFacilityService" />
+
+	<bean name="org.hisrc.azw.integration.StationService" class="org.hisrc.azw.service.impl.MemoryBasedStationService" />
+
+	<bean name="org.hisrc.azw.integration.FacilityStateSnapshotService"
+		class="org.hisrc.azw.service.impl.MemoryBasedFacilityStateSnapshotService" />
+
+	<bean name="org.hisrc.azw.service.FacilityStateWatcherService"
+		class="org.hisrc.azw.service.impl.DefaultFacilityStateWatcherService"
+		init-method="start">
+		<property name="stationDataAccess" ref="org.hisrc.azw.integration.StationDataAccess" />
+		<property name="facilityStateReportDataAccess"
+			ref="org.hisrc.azw.integration.FacilityStateReportDataAccess" />
+		<property name="facilityService" ref="org.hisrc.azw.integration.FacilityService" />
+		<property name="stationService" ref="org.hisrc.azw.integration.StationService" />
+		<property name="facilityStateSnapshotService"
+			ref="org.hisrc.azw.integration.FacilityStateSnapshotService" />
+	</bean>
+
+	<bean name="org.hisrc.azw.service.FacilityStateReportFeatureService"
+		class="org.hisrc.azw.service.impl.DefaultFacilityStateReportFeatureService">
+		<property name="facilityService" ref="org.hisrc.azw.integration.FacilityService" />
+		<property name="stationService" ref="org.hisrc.azw.integration.StationService" />
+		<property name="facilityStateSnapshotService"
+			ref="org.hisrc.azw.integration.FacilityStateSnapshotService" />
+	</bean>
+
 </beans>

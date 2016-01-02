@@ -14,8 +14,7 @@ import org.hisrc.azw.service.FacilityStateSnapshotService;
 import org.hisrc.azw.service.FacilityStateReportFeatureService;
 import org.hisrc.azw.service.StationService;
 
-public class DefaultFacilityStateReportFeatureService implements
-		FacilityStateReportFeatureService {
+public class DefaultFacilityStateReportFeatureService implements FacilityStateReportFeatureService {
 
 	private StationService stationService;
 	private FacilityService facilityService;
@@ -25,8 +24,7 @@ public class DefaultFacilityStateReportFeatureService implements
 		return stationService;
 	}
 
-	@SuppressWarnings("unused")
-	private void setStationService(StationService stationService) {
+	public void setStationService(StationService stationService) {
 		this.stationService = stationService;
 	}
 
@@ -34,8 +32,7 @@ public class DefaultFacilityStateReportFeatureService implements
 		return facilityService;
 	}
 
-	@SuppressWarnings("unused")
-	private void setFacilityService(FacilityService facilityService) {
+	public void setFacilityService(FacilityService facilityService) {
 		this.facilityService = facilityService;
 	}
 
@@ -43,9 +40,7 @@ public class DefaultFacilityStateReportFeatureService implements
 		return facilityStateSnapshotService;
 	}
 
-	@SuppressWarnings("unused")
-	private void setFacilityStateSnapshotService(
-			FacilityStateSnapshotService facilityStateSnapshotService) {
+	public void setFacilityStateSnapshotService(FacilityStateSnapshotService facilityStateSnapshotService) {
 		this.facilityStateSnapshotService = facilityStateSnapshotService;
 	}
 
@@ -53,8 +48,7 @@ public class DefaultFacilityStateReportFeatureService implements
 	private DefaultFacilityStateReportFeatureService() {
 	}
 
-	public DefaultFacilityStateReportFeatureService(
-			StationService stationService, FacilityService facilityService,
+	public DefaultFacilityStateReportFeatureService(StationService stationService, FacilityService facilityService,
 			FacilityStateSnapshotService facilityStateSnapshotService) {
 		Validate.notNull(stationService);
 		Validate.notNull(facilityService);
@@ -66,45 +60,40 @@ public class DefaultFacilityStateReportFeatureService implements
 
 	@Override
 	public List<FacilityStateReportFeature> findAll() {
-		final Iterable<FacilityStateSnapshot> snapshots = getFacilityStateSnapshotService()
-				.findAllLast();
+		final Iterable<FacilityStateSnapshot> snapshots = getFacilityStateSnapshotService().findAllLast();
 		return createFeatures(snapshots);
 	}
-	
+
 	@Override
-	public List<FacilityStateReportFeature> findAllUpdatedSince(
-			long timestamp) {
+	public List<FacilityStateReportFeature> findAllUpdatedSince(long timestamp) {
 		final Iterable<FacilityStateSnapshot> snapshots = getFacilityStateSnapshotService()
 				.findAllLastUpdatedSince(timestamp);
 		return createFeatures(snapshots);
 	}
-	
+
 	@Override
-	public FacilityStateReportFeature findByFacilityEquipmentnumber(
-			long facilityEquipmentnumber) {
+	public FacilityStateReportFeature findByFacilityEquipmentnumber(long facilityEquipmentnumber) {
 		final FacilityStateSnapshot snapshot = getFacilityStateSnapshotService()
 				.findLastByEquipmentnumber(facilityEquipmentnumber);
 		return createFeature(snapshot);
 	}
-	
+
 	@Override
-	public List<FacilityStateReportFeature> findByFacilityStates(
-			Iterable<FacilityState> facilityStates) {
+	public List<FacilityStateReportFeature> findByFacilityStates(Iterable<FacilityState> facilityStates) {
 		final Iterable<FacilityStateSnapshot> snapshots = getFacilityStateSnapshotService()
 				.findLastByFacilityStates(facilityStates);
 		return createFeatures(snapshots);
 	}
-	
+
 	@Override
-	public List<FacilityStateReportFeature> findByFacilityStatesUpdatedSince(
-			Iterable<FacilityState> facilityStates, long timestamp) {
+	public List<FacilityStateReportFeature> findByFacilityStatesUpdatedSince(Iterable<FacilityState> facilityStates,
+			long timestamp) {
 		final Iterable<FacilityStateSnapshot> snapshots = getFacilityStateSnapshotService()
 				.findLastByFacilityStatesUpdatedSince(facilityStates, timestamp);
 		return createFeatures(snapshots);
 	}
-	
-	private List<FacilityStateReportFeature> createFeatures(
-			final Iterable<FacilityStateSnapshot> snapshots) {
+
+	private List<FacilityStateReportFeature> createFeatures(final Iterable<FacilityStateSnapshot> snapshots) {
 		final List<FacilityStateReportFeature> features = new LinkedList<>();
 		for (final FacilityStateSnapshot snapshot : snapshots) {
 			final FacilityStateReportFeature feature = createFeature(snapshot);
@@ -113,20 +102,16 @@ public class DefaultFacilityStateReportFeatureService implements
 		return features;
 	}
 
-	private FacilityStateReportFeature createFeature(
-			final FacilityStateSnapshot snapshot) {
-		Facility facility = getFacilityService().findByEquipmentnumber(
-				snapshot.getEquipmentnumber());
+	private FacilityStateReportFeature createFeature(final FacilityStateSnapshot snapshot) {
+		Facility facility = getFacilityService().findByEquipmentnumber(snapshot.getEquipmentnumber());
 		if (facility == null) {
 			facility = Facility.UNKNOWN;
 		}
-		Station station = getStationService().findByStationnumber(
-				facility.getStationnumber());
+		Station station = getStationService().findByStationnumber(facility.getStationnumber());
 		if (station == null) {
 			station = Station.UNKNOWN;
 		}
-		final FacilityStateReportFeature feature = new FacilityStateReportFeature(
-				station, facility, snapshot);
+		final FacilityStateReportFeature feature = new FacilityStateReportFeature(station, facility, snapshot);
 		return feature;
 	}
 }

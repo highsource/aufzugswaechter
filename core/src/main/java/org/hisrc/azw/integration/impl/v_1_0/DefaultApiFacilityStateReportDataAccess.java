@@ -38,8 +38,7 @@ public class DefaultApiFacilityStateReportDataAccess implements
 		return api;
 	}
 
-	@SuppressWarnings("unused")
-	private void setApi(DefaultApi api) {
+	public void setApi(DefaultApi api) {
 		this.api = api;
 	}
 

@@ -25,8 +25,7 @@ public class DefaultApiStationDataAccess implements StationDataAccess {
 		return api;
 	}
 
-	@SuppressWarnings("unused")
-	private void setApi(DefaultApi api) {
+	public void setApi(DefaultApi api) {
 		this.api = api;
 	}
 
