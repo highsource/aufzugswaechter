@@ -22,26 +22,20 @@ public class FacilityStateReportFeature implements Serializable {
 	private final FeatureProperties properties;
 	private final FeatureGeometry geometry;
 
-	public FacilityStateReportFeature(Station station,
-			Facility facility, FacilityStateSnapshot facilityStateSnapshot) {
-		this(Validate.notNull(station).getStationnumber(), Validate.notNull(
-				station).getName(), Validate.notNull(facility)
-				.getEquipmentnumber(), Validate.notNull(facility).getType(),
-				Validate.notNull(facility).getDescription(), Validate.notNull(
-						facility).getGeometry(), Validate.notNull(
-						facilityStateSnapshot).getState(), Validate.notNull(
-						facilityStateSnapshot).getTimestamp());
+	public FacilityStateReportFeature(Station station, Facility facility, FacilityStateSnapshot facilityStateSnapshot) {
+		this(Validate.notNull(station).getStationnumber(), Validate.notNull(station).getName(),
+				Validate.notNull(facility).getEquipmentnumber(), Validate.notNull(facility).getType(),
+				Validate.notNull(facility).getDescription(), Validate.notNull(facility).getGeometry(),
+				Validate.notNull(facilityStateSnapshot).getState(),
+				Validate.notNull(facilityStateSnapshot).getTimestamp());
 	}
 
-	public FacilityStateReportFeature(Long stationnumber,
-			String stationname, Long facilityEquipmentnumber,
-			FacilityType facilityType, String facilityDescription,
-			Point facilityGeometry, FacilityState facilityState,
+	public FacilityStateReportFeature(Long stationnumber, String stationname, Long facilityEquipmentnumber,
+			FacilityType facilityType, String facilityDescription, Point facilityGeometry, FacilityState facilityState,
 			Long facilityStateKnownSince) {
 
-		this.properties = new FeatureProperties(stationnumber, stationname,
-				facilityEquipmentnumber, facilityType, facilityDescription,
-				facilityState, facilityStateKnownSince);
+		this.properties = new FeatureProperties(stationnumber, stationname, facilityEquipmentnumber, facilityType,
+				facilityDescription, facilityState, facilityStateKnownSince);
 		if (facilityGeometry != null) {
 			this.geometry = new FeatureGeometry(facilityGeometry);
 		} else {
@@ -53,10 +47,8 @@ public class FacilityStateReportFeature implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((geometry == null) ? 0 : geometry.hashCode());
-		result = prime * result
-				+ ((properties == null) ? 0 : properties.hashCode());
+		result = prime * result + ((geometry == null) ? 0 : geometry.hashCode());
+		result = prime * result + ((properties == null) ? 0 : properties.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
@@ -90,9 +82,8 @@ public class FacilityStateReportFeature implements Serializable {
 
 	@Override
 	public String toString() {
-		return MessageFormat
-				.format("FacilityStateReportFeature [type={0}, properties={1}, geometry={2}]",
-						type, properties, geometry);
+		return MessageFormat.format("FacilityStateReportFeature [type={0}, properties={1}, geometry={2}]", type,
+				properties, geometry);
 	}
 
 	public String getType() {
@@ -118,9 +109,8 @@ public class FacilityStateReportFeature implements Serializable {
 		private final FacilityState facilityState;
 		private final Long facilityStateKnownSince;
 
-		public FeatureProperties(Long stationnumber, String stationname,
-				Long facilityEquipmentnumber, FacilityType facilityType,
-				String facilityDescription, FacilityState facilityState,
+		public FeatureProperties(Long stationnumber, String stationname, Long facilityEquipmentnumber,
+				FacilityType facilityType, String facilityDescription, FacilityState facilityState,
 				Long facilityStateKnownSince) {
 			Validate.notNull(stationnumber);
 			Validate.notNull(stationname);
@@ -165,38 +155,23 @@ public class FacilityStateReportFeature implements Serializable {
 
 		@Override
 		public String toString() {
-			return MessageFormat
-					.format("Properties [stationnumber={0}, stationname={1}, facilityEquipmentnumber={2}, facilityType={3}, facilityDescription={4}, facilityState={5}, facilityStateKnownSince={6}]",
-							stationnumber, stationname,
-							facilityEquipmentnumber, facilityType,
-							facilityDescription, facilityState,
-							facilityStateKnownSince);
+			return MessageFormat.format(
+					"Properties [stationnumber={0}, stationname={1}, facilityEquipmentnumber={2}, facilityType={3}, facilityDescription={4}, facilityState={5}, facilityStateKnownSince={6}]",
+					stationnumber, stationname, facilityEquipmentnumber, facilityType, facilityDescription,
+					facilityState, facilityStateKnownSince);
 		}
 
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime
-					* result
-					+ ((facilityDescription == null) ? 0 : facilityDescription
-							.hashCode());
-			result = prime
-					* result
-					+ ((facilityEquipmentnumber == null) ? 0
-							: facilityEquipmentnumber.hashCode());
-			result = prime * result
-					+ ((facilityState == null) ? 0 : facilityState.hashCode());
-			result = prime
-					* result
-					+ ((facilityStateKnownSince == null) ? 0
-							: facilityStateKnownSince.hashCode());
-			result = prime * result
-					+ ((facilityType == null) ? 0 : facilityType.hashCode());
-			result = prime * result
-					+ ((stationname == null) ? 0 : stationname.hashCode());
-			result = prime * result
-					+ ((stationnumber == null) ? 0 : stationnumber.hashCode());
+			result = prime * result + ((facilityDescription == null) ? 0 : facilityDescription.hashCode());
+			result = prime * result + ((facilityEquipmentnumber == null) ? 0 : facilityEquipmentnumber.hashCode());
+			result = prime * result + ((facilityState == null) ? 0 : facilityState.hashCode());
+			result = prime * result + ((facilityStateKnownSince == null) ? 0 : facilityStateKnownSince.hashCode());
+			result = prime * result + ((facilityType == null) ? 0 : facilityType.hashCode());
+			result = prime * result + ((stationname == null) ? 0 : stationname.hashCode());
+			result = prime * result + ((stationnumber == null) ? 0 : stationnumber.hashCode());
 			return result;
 		}
 
@@ -217,16 +192,14 @@ public class FacilityStateReportFeature implements Serializable {
 			if (facilityEquipmentnumber == null) {
 				if (other.facilityEquipmentnumber != null)
 					return false;
-			} else if (!facilityEquipmentnumber
-					.equals(other.facilityEquipmentnumber))
+			} else if (!facilityEquipmentnumber.equals(other.facilityEquipmentnumber))
 				return false;
 			if (facilityState != other.facilityState)
 				return false;
 			if (facilityStateKnownSince == null) {
 				if (other.facilityStateKnownSince != null)
 					return false;
-			} else if (!facilityStateKnownSince
-					.equals(other.facilityStateKnownSince))
+			} else if (!facilityStateKnownSince.equals(other.facilityStateKnownSince))
 				return false;
 			if (facilityType != other.facilityType)
 				return false;
@@ -256,8 +229,7 @@ public class FacilityStateReportFeature implements Serializable {
 			Validate.notNull(coordinate);
 			Validate.isTrue(coordinate.x != Coordinate.NULL_ORDINATE);
 			Validate.isTrue(coordinate.y != Coordinate.NULL_ORDINATE);
-			this.coordinates = new BigDecimal[] { new BigDecimal(coordinate.x),
-					new BigDecimal(coordinate.y) };
+			this.coordinates = new BigDecimal[] { new BigDecimal(coordinate.x), new BigDecimal(coordinate.y) };
 		}
 
 		public String getType() {
@@ -270,8 +242,7 @@ public class FacilityStateReportFeature implements Serializable {
 
 		@Override
 		public String toString() {
-			return MessageFormat.format("Geometry [type={0}, coordinates={1}]",
-					type, Arrays.toString(coordinates));
+			return MessageFormat.format("Geometry [type={0}, coordinates={1}]", type, Arrays.toString(coordinates));
 		}
 
 		@Override

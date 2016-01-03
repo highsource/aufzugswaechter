@@ -14,6 +14,8 @@
         http://www.directwebremoting.org/schema/spring-dwr
         http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd">
 
+	<import resource="classpath*:/org/hisrc/azw/twitter/config.xml" />
+
 	<context:component-scan base-package="org.hisrc.azw.controller" />
 
 	<bean id="jsonHttpMessageConverter"

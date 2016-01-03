@@ -18,8 +18,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
-public class DefaultApiFacilityStateReportDataAccess implements
-		FacilityStateReportDataAccess {
+public class DefaultApiFacilityStateReportDataAccess implements FacilityStateReportDataAccess {
 
 	private GeometryFactory geometryFactory = new GeometryFactory();
 
@@ -48,13 +47,12 @@ public class DefaultApiFacilityStateReportDataAccess implements
 	}
 
 	@Override
-	public Iterable<FacilityStateReport> findByFacilityStates(
-			Iterable<FacilityState> facilityStates) throws IOException {
+	public Iterable<FacilityStateReport> findByFacilityStates(Iterable<FacilityState> facilityStates)
+			throws IOException {
 		return findByFacilityTypesAndFacilityStates(null, facilityStates);
 	}
 
-	private Iterable<FacilityStateReport> findByFacilityTypesAndFacilityStates(
-			Iterable<FacilityType> facilityTypes,
+	private Iterable<FacilityStateReport> findByFacilityTypesAndFacilityStates(Iterable<FacilityType> facilityTypes,
 			Iterable<FacilityState> facilityStates) throws IOException {
 
 		final List<String> types;
@@ -77,10 +75,8 @@ public class DefaultApiFacilityStateReportDataAccess implements
 		}
 
 		try {
-			final List<org.hisrc.dbeac.client.v_1_0.model.Facility> fs = getApi()
-					.findFacilities(types, states);
-			final List<FacilityStateReport> facilityStateReports = new ArrayList<>(
-					fs.size());
+			final List<org.hisrc.dbeac.client.v_1_0.model.Facility> fs = getApi().findFacilities(types, states);
+			final List<FacilityStateReport> facilityStateReports = new ArrayList<>(fs.size());
 			for (org.hisrc.dbeac.client.v_1_0.model.Facility f : fs) {
 				facilityStateReports.add(asFacilityStateReport(f));
 			}
@@ -91,11 +87,9 @@ public class DefaultApiFacilityStateReportDataAccess implements
 	}
 
 	@Override
-	public FacilityStateReport findByEquipmentnumber(long equipmentnumber)
-			throws IOException {
+	public FacilityStateReport findByEquipmentnumber(long equipmentnumber) throws IOException {
 		try {
-			org.hisrc.dbeac.client.v_1_0.model.Facility f = getApi()
-					.getFacilityByEquipmentNumber(equipmentnumber);
+			org.hisrc.dbeac.client.v_1_0.model.Facility f = getApi().getFacilityByEquipmentNumber(equipmentnumber);
 			return asFacilityStateReport(f);
 		} catch (ApiException cause) {
 			// throw new IOException(
@@ -126,24 +120,33 @@ public class DefaultApiFacilityStateReportDataAccess implements
 		} else {
 			geometry = null;
 		}
-		return new Facility(e.getEquipmentnumber(), facilityType,
-				e.getDescription(), geometry, e.getStationnumber());
+		return new Facility(e.getEquipmentnumber(), facilityType, e.getDescription(), geometry, e.getStationnumber());
 	}
 
-	private FacilityStateReport asFacilityStateReport(
-			org.hisrc.dbeac.client.v_1_0.model.Facility f) {
+	private double changeProbability = 0.05;
+
+	public double getChangeProbability() {
+		return changeProbability;
+	}
+
+	public void setChangeProbability(double changeProbability) {
+		this.changeProbability = changeProbability;
+	}
+
+	private FacilityStateReport asFacilityStateReport(org.hisrc.dbeac.client.v_1_0.model.Facility f) {
 
 		final Facility facility = asFacility(f);
 		final FacilityState facilityState;
+		final boolean shouldNotBeFaked = Math.random() >= getChangeProbability();
 		switch (f.getState()) {
 		case ACTIVE:
-			facilityState = FacilityState.ACTIVE;
+			facilityState = shouldNotBeFaked ? FacilityState.ACTIVE : FacilityState.TEST_ACTIVE;
 			break;
 		case INACTIVE:
-			facilityState = FacilityState.INACTIVE;
+			facilityState = shouldNotBeFaked ? FacilityState.INACTIVE : FacilityState.TEST_INACTIVE;
 			break;
 		case UNKNOWN:
-			facilityState = FacilityState.UNKNOWN;
+			facilityState = shouldNotBeFaked ? FacilityState.UNKNOWN : FacilityState.TEST_UNKNOWN;
 			break;
 		default:
 			facilityState = null;

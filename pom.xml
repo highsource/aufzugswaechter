@@ -45,6 +45,7 @@
 		<camel.version>2.16.1</camel.version>
 		<aws-java-sdk.version>1.10.43</aws-java-sdk.version>
 		<spring.version>4.2.4.RELEASE</spring.version>
+		<spring-cloud-aws.version>1.0.3.RELEASE</spring-cloud-aws.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -67,6 +68,11 @@
 				<groupId>org.hisrc.dbeac</groupId>
 				<artifactId>dbeac-client</artifactId>
 				<version>${dbeac.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-spring</artifactId>
+				<version>${camel.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.camel</groupId>
@@ -94,6 +100,21 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-webmvc</artifactId>
 				<version>${spring.version}</version>
+			</dependency>
+			<dependency> 
+				<groupId>org.springframework</groupId> 
+				<artifactId>spring-context</artifactId> 
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency> 
+				<groupId>org.springframework</groupId> 
+				<artifactId>spring-test</artifactId> 
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-aws-context</artifactId>
+				<version>${spring-cloud-aws.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

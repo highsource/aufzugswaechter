@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:aws-context="http://www.springframework.org/schema/cloud/aws/context"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-4.2.xsd
+        http://www.springframework.org/schema/cloud/aws/context
+        http://www.springframework.org/schema/cloud/spring-cloud-aws-context-1.0.xsd
+        http://camel.apache.org/schema/spring
+        http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<bean name="com.amazonaws.regions.Region" class="com.amazonaws.regions.Region"
+		factory-method="getRegion">
+		<constructor-arg>
+			<util:constant static-field="com.amazonaws.regions.Regions.EU_CENTRAL_1" />
+		</constructor-arg>
+	</bean>
+
+	<bean name="com.amazonaws.services.s3.AmazonS3Client"
+		factory-bean="com.amazonaws.regions.Region" factory-method="createClient">
+		<constructor-arg index="0"
+			value="com.amazonaws.services.s3.AmazonS3Client" />
+		<constructor-arg index="1">
+			<null />
+		</constructor-arg>
+		<constructor-arg index="2">
+			<null />
+		</constructor-arg>
+	</bean>
+
+	<bean name="s3://aufzugswaechter/twitter.properties" factory-bean="com.amazonaws.services.s3.AmazonS3Client"
+		factory-method="getObject">
+		<constructor-arg index="0" value="aufzugswaechter" />
+		<constructor-arg index="1" value="twitter.properties" />
+	</bean>
+
+	<bean name="java.util.Properties[twitter.properties]" class="java.util.Properties" />
+
+	<bean name="java.util.Properties[twitter.properties].load"
+		class="org.springframework.beans.factory.config.MethodInvokingBean">
+		<property name="targetObject" ref="java.util.Properties[twitter.properties]" />
+		<property name="targetMethod" value="load" />
+		<property name="arguments">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject" ref="s3://aufzugswaechter/twitter.properties" />
+				<property name="targetMethod" value="getObjectContent" />
+			</bean>
+		</property>
+	</bean>
+
+	<aws-context:context-region region="eu-central-1" />
+	<aws-context:context-resource-loader />
+
+	<!-- context:property-placeholder properties-ref="java.util.Properties[twitter.properties]" 
+		/ -->
+
+	<bean
+		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"
+		depends-on="java.util.Properties[twitter.properties].load">
+		<property name="properties" ref="java.util.Properties[twitter.properties]" />
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+	</bean>
+
+	<bean name="twitter:timeline/user"
+		class="org.apache.camel.component.twitter.TwitterEndpointDirect">
+		<constructor-arg index="0" value="twitter:timeline/user" />
+		<constructor-arg index="1">
+			<bean class="org.apache.camel.component.twitter.TwitterComponent" />
+		</constructor-arg>
+		<constructor-arg index="2">
+			<bean class="org.apache.camel.component.twitter.TwitterConfiguration">
+				<property name="accessToken" value="${twitter.accessToken}" />
+				<property name="accessTokenSecret" value="${twitter.accessTokenSecret}" />
+				<property name="consumerKey" value="${twitter.consumerKey}" />
+				<property name="consumerSecret" value="${twitter.consumerSecret}" />
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<camel:camelContext>
+		<camel:template id="org.apache.camel.ProducerTemplate"/>
+		<camel:route>
+			<camel:from uri="direct:laconic" />
+			<camel:to ref="twitter:timeline/user" />
+		</camel:route>
+	</camel:camelContext>
+
+
+</beans>
