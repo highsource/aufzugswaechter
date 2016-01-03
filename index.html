@@ -57,9 +57,9 @@
 							"<b>Facility state:</b> " + feature.properties.facilityState + "<br/>" +
 							"<b>Facility state known since</b> " + since.toLocaleDateString() + " " + since.toLocaleTimeString() ;
 					var markers;
-					if (feature.properties.facilityState === 'INACTIVE') {
+					if (feature.properties.facilityState === 'INACTIVE' || feature.properties.facilityState === 'TEST_INACTIVE') {
 						markers = inactiveMarkers;
-					} else if (feature.properties.facilityState === 'ACTIVE') {
+					} else if (feature.properties.facilityState === 'ACTIVE' || feature.properties.facilityState === 'TEST_ACTIVE') {
 						markers = activeMarkers;
 					} else {
 						markers = unknownMarkers;
