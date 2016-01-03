@@ -123,7 +123,7 @@ public class DefaultApiFacilityStateReportDataAccess implements FacilityStateRep
 		return new Facility(e.getEquipmentnumber(), facilityType, e.getDescription(), geometry, e.getStationnumber());
 	}
 
-	private double changeProbability = 0.05;
+	private double changeProbability = 0.02;
 
 	public double getChangeProbability() {
 		return changeProbability;
