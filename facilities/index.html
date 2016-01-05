@@ -31,10 +31,11 @@
 		</dl>
 		
 	</div>
-
-	<input id="email" type="text"/>
+	
+	<label for="email">E-Mail:</label>
+	<input id="email" name="email" type="text"/>
 	<div class="g-recaptcha" data-sitekey="6LdwghQTAAAAACGcpELABrlpGo0NbXfYuxX4auvm"></div>
-	<input id="subscribe" type="button"/>
+	<input id="subscribe" type="button" value="Subscribe"/>
 
 	<script>
 		var href = window.location.href;
@@ -62,9 +63,14 @@
 		{
 			$("#subscribe").click(function()
 			{
-				console.log($("#email").val());
-				console.log(grecaptcha.getResponse());
-				console.log("Subscribing for all the facilities.");
+				var mail = $("#email").val();
+				var grecaptchaResponse = grecaptcha.getResponse();
+				$.ajax({
+					type: "PUT",
+					url: "http://api.aufzugswaechter.org/facilities/subscriptions/email/" + mail,
+					data: { grecaptchaResponse : grecaptchaResponse},
+					contentType: "application/json"});
+
 			});
 			$("#facilities").show();
 		}
@@ -79,9 +85,14 @@
 				$("#subscribe").click(function()
 				{
 
-					console.log($("#email").val());
-					console.log(grecaptcha.getResponse());
-					console.log("Subscribing for the facility " + equipmentnumber);
+					var mail = $("#email").val();
+					var grecaptchaResponse = grecaptcha.getResponse();
+					$.ajax({
+						type: "PUT",
+						url: "http://api.aufzugswaechter.org/facilities/" + equipmentnumber + "/subscriptions/email/" + mail,
+						data: { grecaptchaResponse : grecaptchaResponse},
+						contentType: "application/json"});
+
 				});
 				$("#facility").show();
 			});
