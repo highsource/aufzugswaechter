@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+
+	<import resource="classpath:/org/hisrc/azw/amazonaws/config.xml" />
+	
+	<bean
+		name="org.hisrc.azw.email.FacilityStateChangedEventEmailSubscriptionService"
+		class="org.hisrc.azw.email.impl.AmazonSNSFacilityStateChangedEventEmailSubscriptionService">
+		<property name="client" ref="com.amazonaws.services.sns.AmazonSNSClient" />
+		<property name="facilityService" ref="org.hisrc.azw.integration.FacilityService" />
+	</bean>
+	
+	<bean name="aws-sns://facilities"
+		class="org.apache.camel.component.aws.sns.SnsEndpoint">
+		<constructor-arg index="0" value="aws-sns://facilities" />
+		<constructor-arg index="1">
+			<bean class="org.apache.camel.component.aws.sns.SnsComponent" />
+		</constructor-arg>
+		<constructor-arg index="2">
+			<bean class="org.apache.camel.component.aws.sns.SnsConfiguration">
+				<property name="amazonSNSClient" ref="com.amazonaws.services.sns.AmazonSNSClient" />
+				<property name="topicName" value="facilities" />
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+</beans>

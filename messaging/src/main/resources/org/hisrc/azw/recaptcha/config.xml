@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+
+	<import resource="classpath:/org/hisrc/azw/amazonaws/config.xml" />
+	
+	<bean name="s3://aufzugswaechter/recaptcha.properties" factory-bean="com.amazonaws.services.s3.AmazonS3Client"
+		factory-method="getObject">
+		<constructor-arg index="0" value="aufzugswaechter" />
+		<constructor-arg index="1" value="recaptcha.properties" />
+	</bean>
+
+	<bean name="java.util.Properties[recaptcha.properties]" class="java.util.Properties" />
+
+	<bean name="java.util.Properties[recaptcha.properties].load"
+		class="org.springframework.beans.factory.config.MethodInvokingBean">
+		<property name="targetObject" ref="java.util.Properties[recaptcha.properties]" />
+		<property name="targetMethod" value="load" />
+		<property name="arguments">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject" ref="s3://aufzugswaechter/recaptcha.properties" />
+				<property name="targetMethod" value="getObjectContent" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"
+		depends-on="java.util.Properties[recaptcha.properties].load">
+		<property name="properties" ref="java.util.Properties[recaptcha.properties]" />
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+	</bean>
+	
+	<bean name="org.hisrc.azw.recaptcha.RecaptchaValidator"
+		class="org.hisrc.azw.recaptcha.impl.RestRecaptchaValidator">
+		<property name="recaptchaUrl" value="https://www.google.com/recaptcha/api/siteverify"/>
+		<property name="recaptchaSiteSecret" value="${recaptcha.siteSecret}"/>
+		<property name="restTemplate">
+			<bean class="org.springframework.web.client.RestTemplate"/>
+		</property>
+		
+	</bean>
+	
+</beans>

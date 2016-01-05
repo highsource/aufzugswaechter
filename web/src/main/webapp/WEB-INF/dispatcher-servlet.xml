@@ -15,8 +15,11 @@
         http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd">
 
 	<import resource="classpath*:/org/hisrc/azw/twitter/config.xml" />
+	<import resource="classpath*:/org/hisrc/azw/camel/config.xml" />
+	<import resource="classpath*:/org/hisrc/azw/recaptcha/config.xml" />
 
 	<context:component-scan base-package="org.hisrc.azw.controller" />
+	<context:component-scan base-package="org.hisrc.azw.email.controller" />
 
 	<bean id="jsonHttpMessageConverter"
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">

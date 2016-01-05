@@ -17,7 +17,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.hisrc.aufzugswaechter</groupId>
-			<artifactId>aufzugswaechter-twitter</artifactId>
+			<artifactId>aufzugswaechter-messaging</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

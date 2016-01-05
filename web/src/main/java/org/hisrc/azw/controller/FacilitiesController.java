@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.Validate;
 import org.hisrc.azw.dto.FacilityStateReportFeature;
 import org.hisrc.azw.service.FacilityStateReportFeatureService;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,5 +42,14 @@ public class FacilitiesController {
 		} else {
 			return getFacilityStateReportFeatureService().findAllUpdatedSince(timestamp);
 		}
+	}
+
+	@CrossOrigin(origins = { "*" })
+	@RequestMapping(value = "/facilities/{equipmentnumber}", method = RequestMethod.GET)
+	@ResponseBody
+	public FacilityStateReportFeature findByEquipmentnumber(
+			@PathVariable(value = "equipmentnumber") Long equipmentnumber) throws IOException {
+		Validate.notNull(equipmentnumber);
+		return getFacilityStateReportFeatureService().findByFacilityEquipmentnumber(equipmentnumber);
 	}
 }

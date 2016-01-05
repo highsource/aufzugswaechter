@@ -22,7 +22,7 @@
 	</scm>
 	<modules>
 		<module>core</module>
-		<module>twitter</module>
+		<module>messaging</module>
 		<module>web</module>
 	</modules>
 	<profiles>
@@ -80,6 +80,11 @@
 				<version>${camel.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-aws</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.vividsolutions</groupId>
 				<artifactId>jts</artifactId>
 				<version>1.13</version>
@@ -99,6 +104,11 @@
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
 			<dependency> 
