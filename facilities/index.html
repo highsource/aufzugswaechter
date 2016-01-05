@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Aufzugswaechter.org</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="../scripts/jquery.min.js"></script>
+	<!--style>
+		body {
+			padding: 0;
+			margin: 0;
+        	}
+	        html, body, #map {
+        	    height: 100%;
+	            width: 100%;
+        	}
+    </style-->
+	<script src="https://www.google.com/recaptcha/api.js"></script>
+</head>
+<body>
+
+	<div id="facilities" style="display:none;">Subscribe for updates of all the facilities.</div>
+
+	<div id="facility" style="display:none;">Subscribe for updates of the following facility:
+
+		<dl>
+			<dt>Station:</dt><dd id="stationname"></dd>
+			<dt>Facility:</dt><dd id="facilityDescription"></dd>
+			<dt>Facility type:</dt><dd id="facilityType"></dd>
+		</dl>
+		
+	</div>
+
+	<input id="email" type="text"/>
+	<div class="g-recaptcha" data-sitekey="6LdwghQTAAAAACGcpELABrlpGo0NbXfYuxX4auvm"></div>
+	<input id="subscribe" type="button"/>
+
+	<script>
+		var href = window.location.href;
+		var lastIndexOfHash = href.lastIndexOf('#');
+		var equipmentnumber;
+		if (lastIndexOfHash >= 0 )
+		{
+			var equipmentnumberAsString = href.substring (lastIndexOfHash + 1);
+			var equipmentnumberAsNumber = Number(equipmentnumberAsString);
+			if (!Number.isNaN(equipmentnumberAsNumber))
+			{
+				equipmentnumber = equipmentnumberAsNumber;
+			}
+			else
+			{
+				equipmentnumber = null;
+			}
+		}
+		else
+		{
+			equipmentnumber = null;
+		}
+
+		if (equipmentnumber === null)
+		{
+			$("#subscribe").click(function()
+			{
+				console.log($("#email").val());
+				console.log(grecaptcha.getResponse());
+				console.log("Subscribing for all the facilities.");
+			});
+			$("#facilities").show();
+		}
+		else
+		{
+			console.log(equipmentnumber);
+			$.getJSON("http://api.aufzugswaechter.org/facilities/" + equipmentnumber, function(feature) {
+				console.log(feature);
+				$("#stationname").text(feature.properties.stationname);
+				$("#facilityDescription").text(feature.properties.facilityDescription);
+				$("#facilityType").text(feature.properties.facilityType);
+				$("#subscribe").click(function()
+				{
+
+					console.log($("#email").val());
+					console.log(grecaptcha.getResponse());
+					console.log("Subscribing for the facility " + equipmentnumber);
+				});
+				$("#facility").show();
+			});
+		}
+	</script>
+
+</body>
+</html>
