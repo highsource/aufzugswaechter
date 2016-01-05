@@ -67,8 +67,7 @@
 				var grecaptchaResponse = grecaptcha.getResponse();
 				$.ajax({
 					type: "PUT",
-					url: "http://api.aufzugswaechter.org/facilities/subscriptions/email/" + mail,
-					data: { grecaptchaResponse : grecaptchaResponse},
+					url: "http://api.aufzugswaechter.org/facilities/subscriptions/email/" + mail + "?token=" + grecaptchaResponse,
 					contentType: "application/json"});
 
 			});
@@ -78,6 +77,7 @@
 		{
 			console.log(equipmentnumber);
 			$.getJSON("http://api.aufzugswaechter.org/facilities/" + equipmentnumber, function(feature) {
+//			$.getJSON("http://localhost:8080/aufzugswaechter-web/facilities/" + equipmentnumber, function(feature) {
 				console.log(feature);
 				$("#stationname").text(feature.properties.stationname);
 				$("#facilityDescription").text(feature.properties.facilityDescription);
@@ -89,8 +89,8 @@
 					var grecaptchaResponse = grecaptcha.getResponse();
 					$.ajax({
 						type: "PUT",
-						url: "http://api.aufzugswaechter.org/facilities/" + equipmentnumber + "/subscriptions/email/" + mail,
-						data: { grecaptchaResponse : grecaptchaResponse},
+						url: "http://api.aufzugswaechter.org/facilities/" + equipmentnumber + "/subscriptions/email/" + mail + "?token=" + grecaptchaResponse,
+						//url: "http://localhost:8080/aufzugswaechter-web/facilities/" + equipmentnumber + "/subscriptions/email/" + mail + "?token=" + grecaptchaResponse,
 						contentType: "application/json"});
 
 				});

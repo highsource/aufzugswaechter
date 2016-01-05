@@ -41,13 +41,9 @@
 			id: 'mapbox.streets'
 		}).addTo(map);
 
-		var activeMarkers = L.markerClusterGroup();
-		var inactiveMarkers = L.markerClusterGroup();
-		var unknownMarkers = L.markerClusterGroup();
+		var markers = L.markerClusterGroup();
 
-		map.addLayer(activeMarkers);
-		map.addLayer(inactiveMarkers);
-		map.addLayer(unknownMarkers);
+		map.addLayer(markers);
 
 		$.getJSON("http://api.aufzugswaechter.org/facilities", function(features) {
 			for (var index = 0; index < features.length; index++)
@@ -60,23 +56,18 @@
 							"<b>Facility:</b> " + feature.properties.facilityDescription + "<br/>" + 
 							"<b>Facility type:</b> " + feature.properties.facilityType + "<br/>" + 
 							"<b>Facility state:</b> " + feature.properties.facilityState + "<br/>" +
-							"<b>Facility state known since</b> " + since.toLocaleDateString() + " " + since.toLocaleTimeString() ;
-					var markers;
+							"<b>Facility state known since</b> " + since.toLocaleDateString() + " " + since.toLocaleTimeString() + "<br/>" +
+							"<a href=\"facilities/index.html#" +  feature.properties.facilityEquipmentnumber + "\"><b>Subscribe for updates for this facility</b></a>";
 					var icon;
 					if (feature.properties.facilityState === 'INACTIVE' || feature.properties.facilityState === 'TEST_INACTIVE') {
-						markers = inactiveMarkers;
 						icon = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'arrows-v', markerColor: 'red'});
 					} else if (feature.properties.facilityState === 'ACTIVE' || feature.properties.facilityState === 'TEST_ACTIVE') {
-						markers = activeMarkers;
 						icon = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'arrows-v', markerColor: 'green'});
 					} else {
-						markers = unknownMarkers;
 						icon = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'arrows-v', markerColor: 'orange'});
 					}
 					var marker = L.marker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], {icon: icon}).bindPopup(popupText);
 
-
-					//	marker.addTo(map);
 					markers.addLayer(marker);
 				}
 			}
