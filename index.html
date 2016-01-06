@@ -1,78 +1,193 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>Aufzugswaechter.org</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="theme-color" content="#000000">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>Aufzugsw&auml;chter.org</title>
 
-	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-	<link rel="stylesheet" href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css'/>
-	<link rel="stylesheet" href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css'  />
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+		<link rel="stylesheet" href="assets/css/leaflet.css">
+		<link rel="stylesheet" href="assets/css/MarkerCluster.css">
+		<link rel="stylesheet" href="assets/css/MarkerCluster.Default.css">
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+		<link rel="stylesheet" href="assets/css/leaflet.awesome-markers.css">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/leaflet.awesome-markers.css">
+		<link rel="stylesheet" href="assets/css/aufzugswaechter.css">
 
-	<script src="scripts/jquery.min.js"></script>
-	<style>
-		body {
-			padding: 0;
-			margin: 0;
-        	}
-	        html, body, #map {
-        	    height: 100%;
-	            width: 100%;
-        	}
-    </style>
-</head>
-<body>
-	<div id="map"></div>
-	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-	<script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
-	<script src="scripts/leaflet.awesome-markers.min.js"></script>
-	<script>
+		<link rel="apple-touch-icon" sizes="76x76" href="assets/images/favicon-76.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="assets/images/favicon-120.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="assets/images/favicon-152.png">
+		<link rel="icon" sizes="196x196" href="assets/images/favicon-196.png">
+		<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 
-		var map = L.map('map').setView([51.5, 10.5], 6);
+	</head>
 
-		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoib3JsZXNzIiwiYSI6ImNpaXg4cGt2cTAwMGh2Mm01ZDlqYnk5N28ifQ.EDKxdytV0xTiHyI16K0zsg', {
-			maxZoom: 18,
-			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-				'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>',
-			id: 'mapbox.streets'
-		}).addTo(map);
+	<body>
+		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<!--div class="navbar-icon-container">
+						<a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
+						<a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-search fa-lg white"></i></a>
+					</div-->
+					<a class="navbar-brand" href="#">Aufzugsw&auml;chter</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<!--form class="navbar-form navbar-right" role="search">
+						<div class="form-group has-feedback">
+								<input id="searchbox" type="text" placeholder="Search" class="form-control">
+								<span id="searchicon" class="fa fa-search form-control-feedback"></span>
+						</div>
+					</form-->
+					<ul class="nav navbar-nav">
+						<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
+						<!--li class="dropdown">
+							<a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
+								<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>
+								<li class="divider hidden-xs"></li>
+								<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Login</a></li>
+							</ul>
+						</li-->
+						<!--li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;POI List</a></li-->
+					</ul-->
+				</div><!--/.navbar-collapse -->
+			</div>
+		</div>
 
-		var markers = L.markerClusterGroup();
+		<div id="container">
+			<!--div id="sidebar">
+				<div class="sidebar-wrapper">
+					<div class="panel panel-default" id="features">
+						<div class="panel-heading">
+							<h3 class="panel-title">Points of Interest
+							<button type="button" class="btn btn-xs btn-default pull-right" id="sidebar-hide-btn"><i class="fa fa-chevron-left"></i></button></h3>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-8 col-md-8">
+									<input type="text" class="form-control search" placeholder="Filter" />
+								</div>
+								<div class="col-xs-4 col-md-4">
+									<button type="button" class="btn btn-primary pull-right sort" data-sort="feature-name" id="sort-btn"><i class="fa fa-sort"></i>&nbsp;&nbsp;Sort</button>
+								</div>
+							</div>
+						</div>
+						<div class="sidebar-table">
+							<table class="table table-hover" id="feature-list">
+								<thead class="hidden">
+									<tr>
+										<th>Icon</th>
+									<tr>
+									<tr>
+										<th>Name</th>
+									<tr>
+									<tr>
+										<th>Chevron</th>
+									<tr>
+								</thead>
+								<tbody class="list"></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div-->
+			<div id="map"></div>
+		</div>
 
-		map.addLayer(markers);
+		<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Welcome to the Aufzugsw&auml;chter!</h4>
+					</div>
+					<div class="modal-body">
+						<ul class="nav nav-tabs" id="aboutTabs">
+							<li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-question-circle"></i>&nbsp;About the project</a></li>
+							<li><a href="#disclaimer" data-toggle="tab"><i class="fa fa-exclamation-circle"></i>&nbsp;Disclaimer</a></li>
+							<li><a href="#impressum" data-toggle="tab"><i class="fa fa-info-circle"></i>&nbsp;Impressum</a></li>
+						</ul>
+						<div class="tab-content" id="aboutTabsContent">
+							<div class="tab-pane fade active in" id="about">
+								<p>TODO Project description.</p>
+								<!--div class="panel panel-primary">
+									<div class="panel-heading">Features</div>
+									<ul class="list-group">
+										<li class="list-group-item">Fullscreen mobile-friendly map template with responsive navbar and modal placeholders</li>
+										<li class="list-group-item">jQuery loading of external GeoJSON files</li>
+										<li class="list-group-item">Logical multiple layer marker clustering via the <a href="https://github.com/Leaflet/Leaflet.markercluster" target="_blank">leaflet marker cluster plugin</a></li>
+										<li class="list-group-item">Elegant client-side multi-layer feature search with autocomplete using <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a></li>
+										<li class="list-group-item">Responsive sidebar feature list synced with map bounds, which includes sorting and filtering via <a href="http://listjs.com/" target="_blank">list.js</a></li>
+										<li class="list-group-item">Marker icons included in grouped layer control via the <a href="https://github.com/ismyrnow/Leaflet.groupedlayercontrol" target="_blank">grouped layer control plugin</a></li>
+									</ul>
+								</div-->
+							</div>
+							<div id="disclaimer" class="tab-pane fade text-danger">
+								<p>TODO Disclaimer.</p>
+								<p>The data provided on this site is for informational and planning purposes only.</p>
+								<p>Absolutely no accuracy or completeness guarantee is implied or intended. All information on this map is subject to such variations and corrections as might result from a complete title search and/or accurate field survey.</p>
+							</div>
+							<div id="impressum" class="tab-pane fade">
+								<p>TODO Impressum.</p>
+								<p>The data provided on this site is for informational and planning purposes only.</p>
+								<p>Absolutely no accuracy or completeness guarantee is implied or intended. All information on this map is subject to such variations and corrections as might result from a complete title search and/or accurate field survey.</p>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 
-		$.getJSON("http://api.aufzugswaechter.org/facilities", function(features) {
-			for (var index = 0; index < features.length; index++)
-			{
-				var feature = features[index];
-				if (feature.geometry)
-				{
-					var since = new Date(feature.properties.facilityStateKnownSince);
-					var popupText = "<b>Station:</b> " + feature.properties.stationname + "<br/>" +
-							"<b>Facility:</b> " + feature.properties.facilityDescription + "<br/>" + 
-							"<b>Facility type:</b> " + feature.properties.facilityType + "<br/>" + 
-							"<b>Facility state:</b> " + feature.properties.facilityState + "<br/>" +
-							"<b>Facility state known since</b> " + since.toLocaleDateString() + " " + since.toLocaleTimeString() + "<br/>" +
-							"<a href=\"facilities/index.html#" +  feature.properties.facilityEquipmentnumber + "\"><b>Subscribe for updates for this facility</b></a>";
-					var icon;
-					if (feature.properties.facilityState === 'INACTIVE' || feature.properties.facilityState === 'TEST_INACTIVE') {
-						icon = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'arrows-v', markerColor: 'red'});
-					} else if (feature.properties.facilityState === 'ACTIVE' || feature.properties.facilityState === 'TEST_ACTIVE') {
-						icon = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'arrows-v', markerColor: 'green'});
-					} else {
-						icon = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'arrows-v', markerColor: 'orange'});
-					}
-					var marker = L.marker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], {icon: icon}).bindPopup(popupText);
+		<div class="modal fade" id="subscribeModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<form class="form-horizontal" role="form">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Subscribe to updates of the facility <span id="subscribe-stationName" class="subscribe-stationName">Station</span> - <span id="subscribe-facilityDescription" class="subscribe-facilityDescription">Facility</span></h4>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label class="control-label col-sm-2" for="email">Email:</label>
+								<div class="col-sm-10">
+									<input type="hidden" id="subscribe-facilityEquipmentnumber" name="subscribe-facilityEquipmentnumber"/>
+									<input type="email" class="form-control" id="subscribe-email" name="subscribe-email" placeholder="Enter email"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10"> 
+									<div class="g-recaptcha" data-sitekey="6LdwghQTAAAAACGcpELABrlpGo0NbXfYuxX4auvm"></div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" onclick="subscribe();">Subscribe</button>
+							<button type="button" class="btn" data-dismiss="modal">Cancel</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</form>
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 
-					markers.addLayer(marker);
-				}
-			}
-		});
 
-	</script>
-</body>
+		<script src="https://www.google.com/recaptcha/api.js"></script>
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/leaflet.js"></script>
+		<script src="assets/js/leaflet.markercluster.js"></script>
+		<script src="assets/js/leaflet.awesome-markers.min.js"></script>
+		<script src="assets/js/aufzugswaechter.js"></script>
+	</body>
 </html>
