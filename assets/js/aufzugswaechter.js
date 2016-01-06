@@ -46,7 +46,6 @@ var showSubscribeModal = function(equipmentnumber)
 		$("#subscribe-stationName").text(feature.properties.stationname);
 		$("#subscribe-facilityDescription").text(feature.properties.facilityDescription);
 		$("#subscribe-facilityEquipmentnumber").val(feature.properties.facilityEquipmentnumber);
-		alert($("#subscribe-facilityEquipmentnumber").val());
 	});
 
 	$("#subscribeModal").modal("show");
@@ -59,6 +58,7 @@ var subscribe = function()
 	var equipmentnumber = $("#subscribe-facilityEquipmentnumber").val();
 	var email = $("#subscribe-email").val();
 	var grecaptchaResponse = grecaptcha.getResponse();
+	grecaptcha.reset();
 	$.ajax({
 		type: "PUT",
 		url: "http://api.aufzugswaechter.org/facilities/" + equipmentnumber + "/subscriptions/email/" + email + "?token=" + grecaptchaResponse,
