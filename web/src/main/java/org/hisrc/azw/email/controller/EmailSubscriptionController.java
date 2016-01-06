@@ -43,7 +43,7 @@ public class EmailSubscriptionController {
 	}
 
 	@CrossOrigin(origins = { "*" })
-	@RequestMapping(value = "/facilities/subscriptions/email/{email}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/facilities/subscriptions/email/{email}/", method = RequestMethod.PUT)
 	@ResponseBody
 	public void subscribe(@PathVariable(value = "email") String email,
 			@RequestParam(name = "token", required = true) String token) {
@@ -62,10 +62,10 @@ public class EmailSubscriptionController {
 	}
 
 	@CrossOrigin(origins = { "*" })
-	@RequestMapping(value = "/facilities/{equipmentnumber}/subscriptions/email/{email}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/facilities/{equipmentnumber}/subscriptions/email/{email}/", method = RequestMethod.PUT)
 	@ResponseBody
 	public void subscribe(@PathVariable(value = "equipmentnumber") Long equipmentnumber,
-			@PathVariable(value = "equipmentnumber") String email,
+			@PathVariable(value = "email") String email,
 			@RequestParam(name = "token", required = true) String token) {
 		Validate.notNull(equipmentnumber);
 		Validate.notNull(email);
