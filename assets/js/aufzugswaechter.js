@@ -61,7 +61,7 @@ var subscribe = function()
 	grecaptcha.reset();
 	$.ajax({
 		type: "PUT",
-		url: "http://api.aufzugswaechter.org/facilities/" + equipmentnumber + "/subscriptions/email/" + email + "?token=" + grecaptchaResponse,
+		url: "http://api.aufzugswaechter.org/facilities/" + equipmentnumber + "/subscriptions/email/" + encodeURIComponent(email) + "/?token=" + encodeURIComponent(grecaptchaResponse),
 		contentType: "application/json"});
 	$("#subscribeModal").modal("hide");
 	return false;
