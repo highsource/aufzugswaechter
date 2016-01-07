@@ -24,7 +24,7 @@ $.getJSON("http://api.aufzugswaechter.org/facilities", function(features) {
 					"<b>Facility type:</b> " + feature.properties.facilityType + "<br/>" + 
 					"<b>Facility state:</b> " + feature.properties.facilityState + "<br/>" +
 					"<b>Facility state known since</b> " + since.toLocaleDateString() + " " + since.toLocaleTimeString() + "<br/>" +
-					"<a onclick=\"showSubscribeModal(" + feature.properties.facilityEquipmentnumber + ")\"><b>Subscribe to facility state updates</b></a><br/>";
+					"<a style=\"cursor:pointer;\" onclick=\"showSubscribeModal(" + feature.properties.facilityEquipmentnumber + ")\"><b>Subscribe to facility state updates</b></a><br/>";
 			var icon;
 			if (feature.properties.facilityState === 'INACTIVE' || feature.properties.facilityState === 'TEST_INACTIVE') {
 				icon = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'arrows-v', markerColor: 'red'});
