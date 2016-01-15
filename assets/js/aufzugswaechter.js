@@ -19,7 +19,8 @@ $.getJSON("http://api.aufzugswaechter.org/facilities", function(features) {
 		if (feature.geometry)
 		{
 			var since = new Date(feature.properties.facilityStateKnownSince);
-			var popupText = "<b>Station:</b> " + feature.properties.stationname + "<br/>" +
+			var popupText = "<b>Id:</b> " + feature.properties.facilityEquipmentnumber + "<br/>" +
+					"<b>Station:</b> " + feature.properties.stationname + "<br/>" +
 					"<b>Facility:</b> " + feature.properties.facilityDescription + "<br/>" + 
 					"<b>Facility type:</b> " + feature.properties.facilityType + "<br/>" + 
 					"<b>Facility state:</b> " + feature.properties.facilityState + "<br/>" +
