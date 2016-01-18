@@ -166,3 +166,15 @@ So I've implemented my own "dynamic" SNS component for Apache Camel. This compon
 This worked, I've subscribed to a few of the topics via AWS Management Console and started receiving e-mail notifications.
 
 ## E-Mail subscriptions
+
+Now I needed to allow people to subscribe to updates.
+
+First I thought that tehre should be some kind of "subscribe via mail" option on AWS SNS. So that the user could send an e-mail to some technical address of AWS SNS providing the topic of interest. In this case everythin would've been handled by AWS SNS and I only needed to render a `mailto:...` link.
+
+I couldn't find it in AWS SNS docs so I've asked on SO:
+
+[How to subscribe to Amazon SNS topic with e-mail endpoint via e-mail?](http://stackoverflow.com/questions/34606345/how-to-subscribe-to-amazon-sns-topic-with-e-mail-endpoint-via-e-mail)
+
+Finally it appeared that there is not such functionality on AWS SNS - so I had to implement subscriptions in the backend.
+
+TBD
