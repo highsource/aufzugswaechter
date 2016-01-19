@@ -107,6 +107,12 @@ TODO
 
 It took just a few lines of code to add marker clusters. The map started looking pretty cool, with animated marker clusters which "explode" when you zoom in.
 
+But the facility markers were all looking the same. I at least needed to distinguish them by the color. LeafletJS documentation explains how to create custom icons for markers TODO, but since I'm no graphic designer, that looked like quite an effort.
+
+Luckily, I've found yet another plugin for LeafletJS - the Awesome Markers plugin. This plugin delivers exactly what it promises - awesome markers. I've added the plugin and could then change colors of the facility markers based on the state:
+
+TBD
+
 ## Map imagery from Mapbox
 
 I wanted to use OSM map material, but also some good-looking rendering. I knew Mapbox provides it so I've registered on Mapbox and got my own public API key. Configuration on LeafletJS is trivial.
@@ -177,4 +183,54 @@ I couldn't find it in AWS SNS docs so I've asked on SO:
 
 Finally it appeared that there is not such functionality on AWS SNS - so I had to implement subscriptions in the backend.
 
-TBD
+I wanted to keep strict separation of the backend and the frontend, this meant I need an API for subscriptions. I've decided to do it in pure REST style. That is, "subscribing to a facility" would be "creating a e-mail resources under facilitys subscriptions". Consequently implemented as a PUT method operation:
+
+```
+PUT http://api.aufzugswaechter.org/facilities/10213788/subscriptions/email/my%40email.com
+```
+
+The backend used AWS SNS APIs to create a topic (`facility-10213788`) and then an e-mail endpoint for this topic. At this pointed I really started to like AWS Java SDK, it's simple and easy to work with. Reasonable assumptions and conventions, for instance if the topic already exist, it will not be created again and there will be no error reported. You'll just get an existing topic back.
+
+## Adding Bootstrap
+
+Now I needed to add e-mail subscription from to the website. Probably I'll need more UI features in the future and I wanted to try out one of the modern UI web frameworks, so I've decided to use Bootstrap. A team colleague used it very successfully on the first DB Hackathon TODO.
+
+At this point I have to say I'm no web designer. I surely know some HTML and some CSS, but that's more or less it. So Bootstrap wasn't easy for me. After a couple of hours it was clear that I'm not getting the results I want. I wanted a pretty-looking website with a LeafletJS map, few forms and dialogs, but I had no time to learn Bootstrap in-depth.
+
+Happily, I've found [Bootleaf](https://github.com/bmcbride/bootleaf) which is a very good Bootstrap template for LeafletJS maps. It contained everything I needed (and more) so I've cloned it and customized for my purposes. "Customization" was basically throwing out everything I didn't needed and moving the scripts I already had in.
+
+This worked quite well, I had a reasonably well-looking Bootstrap-based website with the map of elevators I already had.
+
+## E-Mail subscriptions form
+
+With examples from Bootleaf and Bootstrap documentation I've build a very simple form for e-mail subscriptions. This form can be opened from the facility markers info window. A hidden field carriers the equipment number of the facility, the user can type in his e-mail in the field. Form action makes a PUT request to add the e-mail to the subscriptions of this facility using the REST API I've previously developed.
+
+To save time, I've decided to do no form validation like if the e-mail address is filled and has a correct format.
+
+## Checking for robots
+
+Having implemented the e-mail subscription form, I've got second thoughts. My backend did not check for robots. So basically the API could have been misused to start subscriptions for any e-mail address automatically. The AWS SNS still asks to confirm the subscription from the target e-mail, so you can't be subscribed without your consent. But it would be possible to *initiate* subscriptions for any e-mail so you can get spammed with "please confirm your subscription" e-mails from AWS SNS, which is not good.
+
+I've realized I'll need to build in this protection, some kind of CAPTCHA. I never did this before so I took the first thing which came to my mind which was Google reCAPTCHA. It was in the news not so long ago, so would be good to try it out to see how it worked.
+
+Adding Google reCAPTCHA was done in two parts.
+
+First, I had to add reCaptcha to the e-mail subscription form which was pretty trivial. I had to register for usage, add a `div` with a special class and `data-sitekey` attribute and reCAPTCHA API script to the page. When submitting the form, I just called `grecaptcha.getResponse()` to get the token for server-side validation.
+
+Next, I had to extend the API and the backend to consider the reCAPTCHA token. I've ended up with an URI like:
+
+```
+PUT http://api.aufzugswaechter.org/facilities/10213788/subscriptions/email/my%40email.com/?token=<reCaptcha response>
+```
+
+The backend had to make a request to a Google reCAPTCHA REST API to validate this token.
+
+Here I also had a small fight with Spring MVC. I first wanted to have the following URI: 
+
+```
+PUT http://api.aufzugswaechter.org/facilities/10213788/subscriptions/email/my%40email.com?token=<reCaptcha response>
+```
+
+But it appeared that Spring MVC interpreted the last `.com` as a file extension and cut it out. It is possible to reconfigure it, but I've decided to add a trailing `/` into the request mapping ( `.../subscriptions/email/my%40email.com/?token=...`) and it solved the problem.
+
+I've used Spring's `RestTemplate` to invoke Google reCAPTCHA REST API. The "site secret" was once again provided from a secure S3 bucket.
