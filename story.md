@@ -191,6 +191,8 @@ PUT http://api.aufzugswaechter.org/facilities/10213788/subscriptions/email/my%40
 
 The backend used AWS SNS APIs to create a topic (`facility-10213788`) and then an e-mail endpoint for this topic. At this pointed I really started to like AWS Java SDK, it's simple and easy to work with. Reasonable assumptions and conventions, for instance if the topic already exist, it will not be created again and there will be no error reported. You'll just get an existing topic back.
 
+In aftermath, I probably should have used a different service for e-mail subscriptions. AWS SNS seems to be tailored for the administrative stuff like "your server is down", it is not intended for mailing lists and such. There is no possibility to customize the e-mails, provide a sender etc. These features were not essential for the prototype but I'll have to switch to something else (SendGird?) later on.
+
 ## Adding Bootstrap
 
 Now I needed to add e-mail subscription from to the website. Probably I'll need more UI features in the future and I wanted to try out one of the modern UI web frameworks, so I've decided to use Bootstrap. A team colleague used it very successfully on the first DB Hackathon TODO.
@@ -233,4 +235,60 @@ PUT http://api.aufzugswaechter.org/facilities/10213788/subscriptions/email/my%40
 
 But it appeared that Spring MVC interpreted the last `.com` as a file extension and cut it out. It is possible to reconfigure it, but I've decided to add a trailing `/` into the request mapping ( `.../subscriptions/email/my%40email.com/?token=...`) and it solved the problem.
 
-I've used Spring's `RestTemplate` to invoke Google reCAPTCHA REST API. The "site secret" was once again provided from a secure S3 bucket.
+I've used Spring's `RestTemplate` to invoke Google reCAPTCHA REST API (next time I'll use [Feign](https://github.com/Netflix/feign) for this). The "site secret" was once again provided from a secure S3 bucket. Validation worked fine, now e-mail subscriptions were reCAPTCHA-protected.
+
+## Getting more time
+
+Now I've got the website running pretty well, with all the notifications popping out in the Twitter and delivered via e-mail. I still had a couple of days of the contest, but with the holidays over and "business as usual" starting that week, that was not enough to develop a mobile app. Especially since I had no previous experience developing native Android apps.
+
+I've contacted my department manager and explained the situation. I've shown what I got so far, explained what my learning goals are and asked if I could get one or two days free to finish the development. My boss was imediately excited about the whole story and pretty impressed with what I've got already working, so he supported me immediately. I had two additional days free to invest into the development, that should have been enough.
+
+## Getting a mobile phone
+
+The funny part was that I didn't even had a mobile device to start with. My private hardware is ThinkPad notebooks and iPhones. So I either needed an Android phone or a Mac to develop for iPhone. Since an Android phone is easier to get and Java-syntaxed Android apps were closer to my previous exprience, I've decided to develop for Android.
+
+I've asked on a Twitter and a few colleagues offered to lend me a Android phone. I've borrowed a Nexus 4 and was ready to go.
+
+## Starting the mobile app development
+
+I've downloaded the Android Studio and found out it's IntelliJ-based. I used IntelliJ products in the past, using WebStorm for JavaScript-development but for my daily job I'm using Eclipse. Even after I've switched shortcuts to Eclipse, it felt really awkward. But as an Anroid newbie I was bound to the tutorials and guides most of which were made for the Android Studio. I've decided to stick with that for the moment. I still have to decide if I want to go dual-IDE (IntelliJ IDEA is really very good) or just stay with the Eclipse.
+
+My idea for the app was a simple subscription form were you could type in elevator's equipment number to subscribe to that. It would be also cool to add a QR-code reader. But then I saw a Google Maps app template and decided to start with that instead. Most people are visual, not digital and maps provide good visual impression for very small effort.
+
+I've started with the Google Maps template and got some basic code generated. It looked understandable, I could navigate classes and resources but was in "Cargo Cult" mode. That is, not understanding what's happening, just mimicking what I saw and hoping it'll work. That's completely ignorant but I really did not have time for any theory.
+
+Somehow I also did not manage to make the device emulator work. Probably my ThinkPad is too old to handle it, but again I did not have time to dig into that. But the generated app ran (and was debuggable) on the real device so that was good enough.
+
+I've changed the title and focused the map on the same location as the website and had my first success with a working Google Maps app, branded "Aufzugswächter", running on the borrowed Nexus 4.
+
+## Adding markers
+
+The next thing was adding markers. I've checked the Google Maps for Android guide to see how to add markers and also some other sources to find out how could I download and parse JSON data. Both were quite easy and I got it running quite fast. I had a 100 green elevator markers on the map.
+
+TODO links auf guides, screenshot
+
+## Info windows
+
+Next I've checked how to make an info window on the markers. First I've just added title and text which was already good enough to see at least some info on the elevators. But then I've checked how to actually create a real info window with UI widgets.
+
+TODO
+
+It actually took me a while to figure out how the pieces are fitting together. What is the layout, what are the resources, how is all that composed and so on. I had a number of epiphanies and also a growing respect for the Android platform. My unerstanding of Android started to grow slowly and "Cargo Cultness" began to decrease.
+
+## Subscribing to push notifications
+
+With the basic app running and showing a map with clickable elevator markers, I could now actually start working on subscriptions for push notifications. This had apparently two parts - subscribing to facility topics from the client and sending a message to these topics from the server. Sending looked quite trivial (a HTTP POST of the message to some Google server) which I could test with `curl` from the command line. Subscribing was more risky for me.
+
+First I've registered for Google Cloud Messaging and got my keys.
+
+TODO link
+
+I've also checked the Google Cloud Messaging guide for Android TODO and their sample client. "Cargo Cult" mode on, I've copy-pasted code which seemed to be relevant and managed to subscribe for a few facilities. Sending messages using `curl` also seemed to work, I was hitting the corresponding breackpoints in code, so the basics worked fine.
+
+## Triggering subscriptions from the marker info windows
+
+Now I had to somehow trigger subscriptions from the marker's info windows. I've added a button to the layout and started to search for the way to handle the button click event.
+
+Finally it appeared that markers info windows aren't "real" UI elements. I found no way to handle any events from the widgets inside the info window layout. It looks Seems like Google Maps just renders the layout and then uses the rendered image to show it in a popup window. So there was basically no way to hanlde a press event of an individual butten there.
+
+TBD
