@@ -289,6 +289,80 @@ I've also checked the Google Cloud Messaging guide for Android TODO and their sa
 
 Now I had to somehow trigger subscriptions from the marker's info windows. I've added a button to the layout and started to search for the way to handle the button click event.
 
-Finally it appeared that markers info windows aren't "real" UI elements. I found no way to handle any events from the widgets inside the info window layout. It looks Seems like Google Maps just renders the layout and then uses the rendered image to show it in a popup window. So there was basically no way to hanlde a press event of an individual butten there.
+Finally it appeared that markers info windows aren't "real" UI elements. I found no way to handle any events from the widgets inside the info window layout. It looks Seems like Google Maps just renders the layout and then uses the rendered image to show it in a popup window. So there was basically no way to hanlde a press event of an individual button there.
+
+After some googling and reading a few answers on SO I've found out that widgets inside the info window don't react to any events, but the window itself does. I've decided to use the "long click" event. That is, the user will have to click/touch and hold the window for a couple of seconds to trigger the action. That was basically the simplest I've come up with to solve the problem - but later UX tests showed that users actually liked this typed of interaction. I mean, my wife said it was good.
+
+TODO some code
+
+## Handling subscriptions
+
+No that I had an event handler for the long click event, I could actually start a subscription for the selected facility. For this I had to keep a mapping of marker -> facility and then, when the long click event was triggered, start the GCM subscription.
+
+TODO code
+
+I thought it would be also very helpful to display some notification on the screen when the subscription was successful. I've recalled I saw something like `Toast`s in the example code and looked it up. It appeared to be exactly what I needed, with `Toast`s I could "bake" and display a notification on the screen.
+
+## Handling push notifications
+
+Next thing was actually handling the push notifications on the device. I wanted these notifications to pop up on the screen (just as notifications from Google Mail etc. do). This required a few more actions in the "Cargo Cult" mode but it started to work quite fast.
+
+TODO
+
+It took me some time to figure out how to make these notifications to appear on the top of the screen. Finally, with the help of a few blog posts I've figured out a combination of parameters which made notifications reliably appear in all modes.
+
+TODO
+
+## Handling unsubscriptions
+
+If you can subscribe, you should be able to unsubscribe as well. I needed to modify the marker info window to display subscribe or unsibscribe button depending on whether the users is subscribed to this facility or not. For this, I needed to know the subscription status.
+
+It appears that there is no way to check the topic subscription statis with GCM. This creates two problems.
+
+First, I need this status to present the corresponding UI.
+
+Second, there's really no way to reliably check if the unsubscription action was ultimately successful. This means the user may still get notifications for the facility he or she unsubscribed from.
+
+This appeared to be a known limitation. The solution to that was to save subscription status on the device and check the topic of the notification. In case we're getting a notification for the topic the user is no longer subscribed to, this would mean that something went wrong with unsubscription and we have to silently trigger unsubscription once again.
+
+Saving the state of subscriptions got me acquainted with preferences. They appeared to be *the* way to share data between different components on Android - I've asked about that on SO:
+
+TODO
+
+## Integrating GCM into the backend
+
+Now that my mobile app could subscribe (or unsubscribe) to individual facilities as well as handle the incoming push notifications, it was time to channel my facility state updates messages via GCM.
+
+My initial plan was to use AWS SNS for that. AWS SNS supports GCM endpoints, so I thought I'll let AWS send my GCM messages.
+
+But it did not quite work the way I thought.
+
+First, I somehow could not create a GCM topic as AWS topic subscription endpoint. It looked like I need to create endpoints for individual recipients (basically per-device). That was too much to manage.
+
+Next, I did not find a way to send structured messages. I needed to send more that just text, I needed to send a structure with the facility equipment number, state etc.
+
+So at this moment it started to look like AWS SNS is not the right tool for the job. This echoed with some experiences from the e-mail subscriptions (you can't set the sender or format "nice-looking" mails) and also what I read on SO. Now my impression of AWS SNS was that it's really just for administrative notifications from the AWS infrastructure and not meant for the end-users.
+
+Finally, I decided not to use AWS SNS for GCM messages. But the e-mail part worked reasonably well so migrating from that part from AWS SNS to something else wasn't necessary. I've decided to leave e-mail subscriptions on AWS SNS for the moment.
+
+With these decisions, I had to send GCM messages on my own.
+
+I've checked Apache Camel, but to my surprise found no GCM component there! That was unexpected, both Apache Camel and GCM are major things, so it was a reasonable to expect Apache Camel to have a Google Cloud Messaging component/endpoint.
+
+I've looked around and found a camel-google-cloud-messaging TODO project on GitHub. The code looked really good, but after closer examination it appeared a bit outdated. There were some changes in the GCM server-side API which were not reflected in that project. Another problem was that project license was not clear (at that moment), so it was legally not safe to use it or extend it.
+
+Since I already had some experience writing Apache Camel components, I've decided to implement my own GCM component for Apache Camel. But I needed a Java client for GCM server-side API for that. True, that's a simple HTTP POST interface, so some pragmatic implementation would have worked. But I couldn't imagine that there's no ready-to-use Java client for GCM.
+
+Indeed, Google provides such a client and hosts it in an open-source GitHub project:
+
+TODO
+
+The only problem was that I needed a Maven artifact to use it in my builds and that client was built with Ant - no Maven POMs, no deployment to the central Maven repo.
+
+To solve it, I've created `pom.xml` files for Maven and send them to Google via pull request (TODO), first signing a Google contributor agreement TODO. So now I'm an official Google contributor (would it look good in my CV?).
+
+For the time being I had to use the snapshot artifacts of GCM client I've built. By the way, Google people reacted quite fast, Google GCM client is now available as a Maven artifact from the Central Maven Repository:
+
+TODO
 
 TBD
