@@ -1,0 +1,68 @@
+.marker-cluster-active {
+	background-color: rgba(114, 176, 38, 0.6);
+	}
+.marker-cluster-active div {
+	background-color: rgba(114, 176, 38, 0.75);
+	}
+
+.marker-cluster-unknown {
+	background-color: rgba(114, 176, 38, 0.6);
+	}
+.marker-cluster-unknown div {
+	background-color: rgba(246, 151, 48, 0.75);
+	}
+
+.marker-cluster-inactive {
+	background-color: rgba(114, 176, 38, 0.6);
+	}
+.marker-cluster-inactive div {
+	background-color: rgba(214, 62, 42, 0.75);
+	}
+
+.marker-cluster-inactive-unknown {
+	background-color: rgba(246, 151, 48, 0.6);
+	}
+.marker-cluster-inactive-unknown div {
+	background-color: rgba(214, 62, 42, 0.75);
+	}
+
+	/* IE 6-8 fallback colors */
+.leaflet-oldie .marker-cluster-active {
+	background-color: rgb(114, 176, 38);
+	}
+.leaflet-oldie .marker-cluster-active div {
+	background-color: rgb(114, 176, 38);
+	}
+
+.leaflet-oldie .marker-cluster-unknown {
+	background-color: rgb(114, 176, 38);
+	}
+.leaflet-oldie .marker-cluster-unknown div {
+	background-color: rgb(246, 151, 48);
+	}
+
+.leaflet-oldie .marker-cluster-inactive {
+	background-color: rgb(114, 176, 38);
+	}
+.leaflet-oldie .marker-cluster-inactive div {
+	background-color: rgb(214, 62, 42);
+}
+
+.leaflet-oldie .marker-cluster-inactive-unknown {
+	background-color: rgb(246, 151, 48);
+	}
+.leaflet-oldie .marker-cluster-inactive-unknown div {
+	background-color: rgb(214, 62, 42);
+}
+.marker-cluster div {
+	width: 30px;
+	height: 30px;
+	margin-left: 5px;
+	margin-top: 5px;
+
+	text-align: center;
+	border-radius: 15px;
+	font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: white;
+	}

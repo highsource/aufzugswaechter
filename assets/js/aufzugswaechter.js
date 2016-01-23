@@ -8,7 +8,51 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
 	id: 'mapbox.streets'
 }).addTo(map);
 
-var markers = L.markerClusterGroup();
+var markers = L.markerClusterGroup({
+	showCoverageOnHover: false,
+	iconCreateFunction: function(cluster) {
+		var allChildMarkers = cluster.getAllChildMarkers();
+
+		var activeCount = 0;
+		var inactiveCount = 0;
+		var unknownCount = 0;
+		for (var index = 0; index < allChildMarkers.length; index++) {
+			var marker = allChildMarkers[index];
+			if (marker.featureProperties) {
+				var featureProperties = marker.featureProperties;
+				if (featureProperties.facilityState === 'INACTIVE' || featureProperties.facilityState === 'TEST_INACTIVE') {
+					inactiveCount++;
+				} else if (featureProperties.facilityState === 'ACTIVE' || featureProperties.facilityState === 'TEST_ACTIVE') {
+					activeCount++;
+				} else {
+					unknownCount++;
+				}
+			}
+		}
+
+		var title = activeCount + "/" + inactiveCount + "/" + unknownCount;
+
+		var typeClass = ' marker-cluster-';
+
+		var type;
+		if (inactiveCount === 0 && unknownCount === 0) {
+			type = 'active';
+		} else if (inactiveCount !== 0 && unknownCount === 0) {
+			type = 'inactive';
+		} else if (inactiveCount === 0 && unknownCount !== 0) {
+			type = 'unknown';
+		} else {
+			type = 'inactive-unknown';
+		}
+
+		var typeClass = ' marker-cluster-' + type;
+
+		var childCount = cluster.getChildCount();
+
+		return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster' + typeClass, iconSize: new L.Point(40, 40) });
+	}
+
+});
 
 map.addLayer(markers);
 
@@ -35,6 +79,7 @@ $.getJSON("http://api.aufzugswaechter.org/facilities", function(features) {
 				icon = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'arrows-v', markerColor: 'orange'});
 			}
 			var marker = L.marker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], {icon: icon}).bindPopup(popupText);
+			marker.featureProperties = feature.properties;
 
 			markers.addLayer(marker);
 		}
