@@ -1,4 +1,4 @@
-package org.hisrc.azw.recaptcha;
+package org.hisrc.recaptcha;
 
 import java.io.IOException;
 

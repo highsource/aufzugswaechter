@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.Validate;
 import org.hisrc.azw.dto.FacilityStateReportFeature;
 import org.hisrc.azw.service.FacilityStateReportFeatureService;
+import org.hisrc.azw.service.FacilityStateWatcherService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,4 +53,5 @@ public class FacilitiesController {
 		Validate.notNull(equipmentnumber);
 		return getFacilityStateReportFeatureService().findByFacilityEquipmentnumber(equipmentnumber);
 	}
+
 }

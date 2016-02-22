@@ -41,11 +41,13 @@
 		</dependency>
 	</dependencies>
 	<properties>
-		<dbeac.version>1.0.0</dbeac.version>
+		<dbeac.version>1.0.1-SNAPSHOT</dbeac.version>
 		<camel.version>2.16.1</camel.version>
 		<aws-java-sdk.version>1.10.43</aws-java-sdk.version>
 		<spring.version>4.2.4.RELEASE</spring.version>
 		<spring-cloud-aws.version>1.0.3.RELEASE</spring-cloud-aws.version>
+		<jackson.version>2.4.2</jackson.version>
+		<gcm4j.version>1.3</gcm4j.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -63,6 +65,16 @@
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>2.4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.7.13</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.7.13</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hisrc.dbeac</groupId>
@@ -83,6 +95,16 @@
 				<groupId>org.apache.camel</groupId>
 				<artifactId>camel-aws</artifactId>
 				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.android</groupId>
+				<artifactId>gcm-rest-client</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hisrc.camel</groupId>
+				<artifactId>camel-gcm</artifactId>
+				<version>1.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.vividsolutions</groupId>
@@ -125,6 +147,16 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-aws-context</artifactId>
 				<version>${spring-cloud-aws.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-aws-context</artifactId>
+				<version>${spring-cloud-aws.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

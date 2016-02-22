@@ -14,12 +14,14 @@
         http://www.directwebremoting.org/schema/spring-dwr
         http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd">
 
-	<import resource="classpath*:/org/hisrc/azw/twitter/config.xml" />
-	<import resource="classpath*:/org/hisrc/azw/camel/config.xml" />
-	<import resource="classpath*:/org/hisrc/azw/recaptcha/config.xml" />
+	<import resource="classpath:/org/hisrc/azw/recaptcha/config.xml" />
+	<import resource="classpath:/org/hisrc/azw/service/config.xml" />
+	<import resource="classpath:/org/hisrc/azw/camel/config.xml" />
+	<import resource="classpath:/org/hisrc/azw/email/config.xml" />
 
 	<context:component-scan base-package="org.hisrc.azw.controller" />
 	<context:component-scan base-package="org.hisrc.azw.email.controller" />
+	<context:component-scan base-package="org.hisrc.dbeac.v_1_0.controller" />
 
 	<bean id="jsonHttpMessageConverter"
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
@@ -39,45 +41,5 @@
 	<mvc:annotation-driven />
 	<mvc:default-servlet-handler />
 	<!-- mvc:resources mapping="/" location="/index.html" / -->
-
-
-	<bean name="org.hisrc.dbeac.client.v_1_0.api.DefaultApi" class="org.hisrc.dbeac.client.v_1_0.api.DefaultApi" />
-
-	<bean name="org.hisrc.azw.integration.StationDataAccess"
-		class="org.hisrc.azw.integration.impl.v_1_0.DefaultApiStationDataAccess">
-		<property name="api" ref="org.hisrc.dbeac.client.v_1_0.api.DefaultApi" />
-	</bean>
-
-	<bean name="org.hisrc.azw.integration.FacilityStateReportDataAccess"
-		class="org.hisrc.azw.integration.impl.v_1_0.DefaultApiFacilityStateReportDataAccess">
-		<property name="api" ref="org.hisrc.dbeac.client.v_1_0.api.DefaultApi" />
-	</bean>
-
-	<bean name="org.hisrc.azw.integration.FacilityService" class="org.hisrc.azw.service.impl.MemoryBasedFacilityService" />
-
-	<bean name="org.hisrc.azw.integration.StationService" class="org.hisrc.azw.service.impl.MemoryBasedStationService" />
-
-	<bean name="org.hisrc.azw.integration.FacilityStateSnapshotService"
-		class="org.hisrc.azw.service.impl.MemoryBasedFacilityStateSnapshotService" />
-
-	<bean name="org.hisrc.azw.service.FacilityStateWatcherService"
-		class="org.hisrc.azw.service.impl.DefaultFacilityStateWatcherService"
-		init-method="start">
-		<property name="stationDataAccess" ref="org.hisrc.azw.integration.StationDataAccess" />
-		<property name="facilityStateReportDataAccess"
-			ref="org.hisrc.azw.integration.FacilityStateReportDataAccess" />
-		<property name="facilityService" ref="org.hisrc.azw.integration.FacilityService" />
-		<property name="stationService" ref="org.hisrc.azw.integration.StationService" />
-		<property name="facilityStateSnapshotService"
-			ref="org.hisrc.azw.integration.FacilityStateSnapshotService" />
-	</bean>
-
-	<bean name="org.hisrc.azw.service.FacilityStateReportFeatureService"
-		class="org.hisrc.azw.service.impl.DefaultFacilityStateReportFeatureService">
-		<property name="facilityService" ref="org.hisrc.azw.integration.FacilityService" />
-		<property name="stationService" ref="org.hisrc.azw.integration.StationService" />
-		<property name="facilityStateSnapshotService"
-			ref="org.hisrc.azw.integration.FacilityStateSnapshotService" />
-	</bean>
 
 </beans>

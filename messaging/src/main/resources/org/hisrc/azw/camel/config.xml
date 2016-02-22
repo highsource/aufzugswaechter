@@ -2,8 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:camel="http://camel.apache.org/schema/spring"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
@@ -13,20 +12,136 @@
         http://www.springframework.org/schema/util/spring-util-4.2.xsd
         http://camel.apache.org/schema/spring
         http://camel.apache.org/schema/spring/camel-spring.xsd">
-        
-    <import resource="classpath:/org/hisrc/azw/twitter/config.xml"/>
-    <import resource="classpath:/org/hisrc/azw/email/config.xml"/>
+
+	<import resource="classpath:/org/hisrc/azw/config.xml" />
+	<import resource="classpath:/org/hisrc/azw/amazonaws/config.xml" />
+	<import resource="classpath:/org/hisrc/azw/service/config.xml" />
+
+	<bean name="twitter:timeline/user"
+		class="org.apache.camel.component.twitter.TwitterEndpointDirect">
+		<constructor-arg index="0" value="twitter:timeline/user" />
+		<constructor-arg index="1">
+			<bean class="org.apache.camel.component.twitter.TwitterComponent" />
+		</constructor-arg>
+		<constructor-arg index="2">
+			<bean class="org.apache.camel.component.twitter.TwitterConfiguration">
+				<property name="accessToken" value="${twitter.accessToken}" />
+				<property name="accessTokenSecret" value="${twitter.accessTokenSecret}" />
+				<property name="consumerKey" value="${twitter.consumerKey}" />
+				<property name="consumerSecret" value="${twitter.consumerSecret}" />
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean name="aws-sns://facilities" class="org.apache.camel.component.aws.sns.SnsEndpoint">
+		<constructor-arg index="0" value="aws-sns://facilities" />
+		<constructor-arg index="1">
+			<bean class="org.apache.camel.component.aws.sns.SnsComponent" />
+		</constructor-arg>
+		<constructor-arg index="2">
+			<bean class="org.apache.camel.component.aws.sns.SnsConfiguration">
+				<property name="amazonSNSClient" ref="com.amazonaws.services.sns.AmazonSNSClient" />
+				<property name="topicName" value="facilities" />
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean name="aws-sns-dynamic://facilities" class="org.hisrc.camel.component.aws.sns.DynamicSnsEndpoint">
+		<constructor-arg index="0" value="aws-sns-dynamic://facilities" />
+		<constructor-arg index="1">
+			<bean class="org.apache.camel.component.aws.sns.SnsComponent" />
+		</constructor-arg>
+		<constructor-arg index="2">
+			<bean class="org.apache.camel.component.aws.sns.SnsConfiguration">
+				<property name="amazonSNSClient" ref="com.amazonaws.services.sns.AmazonSNSClient" />
+				<property name="topicName" value="facilities" />
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+	<bean name="gcm:/topics/facilities" class="org.hisrc.camel.component.gcm.GcmEndpoint">
+		<constructor-arg index="0" value="gcm:/topics/facilities" />
+		<constructor-arg index="1">
+			<bean class="org.hisrc.camel.component.gcm.GcmComponent" />
+		</constructor-arg>
+		<constructor-arg index="2">
+			<bean class="org.hisrc.camel.component.gcm.GcmConfiguration">
+				<property name="apiKey" value="${gcm.apiKey}" />
+			</bean>
+		</constructor-arg>
+		<property name="name" value="/topics/facilities"/>
+	</bean>
+
+	<bean
+		name="org.hisrc.azw.camel.HavingOldSnapshotFacilityStateChangedEventFilter"
+		class="org.hisrc.azw.camel.HavingOldSnapshotFacilityStateChangedEventFilter" />
+
+	<bean
+		name="org.hisrc.azw.camel.aws.sns.FacilityStateChangedEventToSnsMessageProcessor"
+		class="org.hisrc.azw.camel.aws.sns.FacilityStateChangedEventToSnsMessageProcessor" />
+
+	<bean
+		name="org.hisrc.azw.camel.gcm.FacilityStateChangedEventToGcmPayloadProcessor"
+		class="org.hisrc.azw.camel.gcm.FacilityStateChangedEventToGcmPayloadProcessor" />
+
+	<bean
+		name="org.hisrc.azw.camel.twitter.FacilityStateChangedEventToTwitterMessageProcessor"
+		class="org.hisrc.azw.camel.twitter.FacilityStateChangedEventToTwitterMessageProcessor" />
 
 	<camel:camelContext>
-		<camel:template id="org.apache.camel.ProducerTemplate"/>
+		<camel:template id="org.apache.camel.ProducerTemplate" />
 		<camel:route>
 			<camel:from uri="direct:laconic" />
-			<camel:to ref="twitter:timeline/user" />
-			<camel:to ref="aws-sns://facilities" />
-			<!-- camel:multicast>
-			</camel:multicast-->
+			<camel:multicast>
+				<camel:filter>
+					<camel:method
+						ref="org.hisrc.azw.camel.HavingOldSnapshotFacilityStateChangedEventFilter"
+						method="hasOldSnapshot" />
+					<camel:bean
+						ref="org.hisrc.azw.camel.twitter.FacilityStateChangedEventToTwitterMessageProcessor"
+						method="process" />
+					<camel:to ref="twitter:timeline/user" />
+				</camel:filter>
+				<camel:filter>
+					<camel:method
+						ref="org.hisrc.azw.camel.HavingOldSnapshotFacilityStateChangedEventFilter"
+						method="hasOldSnapshot" />
+					<camel:bean
+						ref="org.hisrc.azw.camel.aws.sns.FacilityStateChangedEventToSnsMessageProcessor"
+						method="process" />
+					<camel:to ref="aws-sns://facilities" />
+				</camel:filter>
+				<camel:filter>
+					<camel:method
+						ref="org.hisrc.azw.camel.HavingOldSnapshotFacilityStateChangedEventFilter"
+						method="hasOldSnapshot" />
+					<camel:bean
+						ref="org.hisrc.azw.camel.aws.sns.FacilityStateChangedEventToSnsMessageProcessor"
+						method="process" />
+					<camel:to ref="aws-sns-dynamic://facilities" />
+				</camel:filter>
+				<camel:filter>
+					<camel:method
+						ref="org.hisrc.azw.camel.HavingOldSnapshotFacilityStateChangedEventFilter"
+						method="hasOldSnapshot" />
+					<camel:bean
+						ref="org.hisrc.azw.camel.gcm.FacilityStateChangedEventToGcmPayloadProcessor"
+						method="process" />
+					<camel:to ref="gcm:/topics/facilities" />
+				</camel:filter>
+			</camel:multicast>
 		</camel:route>
 	</camel:camelContext>
 
-
+	<bean class="org.springframework.beans.factory.config.MethodInvokingBean">
+		<property name="targetObject"
+			ref="org.hisrc.azw.service.FacilityStateChangedEventService" />
+		<property name="targetMethod" value="registerEventListener" />
+		<property name="arguments">
+			<bean
+				class="org.hisrc.azw.event.camel.CamelFacilityStateChangedEventListener">
+				<property name="producerTemplate" ref="org.apache.camel.ProducerTemplate" />
+			</bean>
+		</property>
+	</bean>
 </beans>

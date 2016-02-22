@@ -1,10 +1,10 @@
-package org.hisrc.azw.recaptcha.impl;
+package org.hisrc.recaptcha.rest;
 
 import java.io.IOException;
 import java.util.Collection;
 
 import org.apache.commons.lang3.Validate;
-import org.hisrc.azw.recaptcha.RecaptchaValidator;
+import org.hisrc.recaptcha.RecaptchaValidator;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;

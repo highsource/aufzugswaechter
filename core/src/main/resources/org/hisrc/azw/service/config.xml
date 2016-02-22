@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<import resource="classpath:/org/hisrc/azw/integration/config.xml" />
+
+	<bean name="org.hisrc.azw.service.FacilityService" class="org.hisrc.azw.service.impl.MemoryBasedFacilityService" />
+
+	<bean name="org.hisrc.azw.service.StationService" class="org.hisrc.azw.service.impl.MemoryBasedStationService" />
+
+	<bean name="org.hisrc.azw.service.FacilityStateSnapshotService"
+		class="org.hisrc.azw.service.impl.MemoryBasedFacilityStateSnapshotService" />
+
+	<bean name="org.hisrc.azw.service.FacilityStateChangedEventService"
+		class="org.hisrc.azw.service.impl.DefaultFacilityStateChangedEventService">
+		<property name="stationDataAccess" ref="org.hisrc.azw.integration.StationDataAccess" />
+		<property name="facilityStateReportDataAccess"
+			ref="org.hisrc.azw.integration.FacilityStateReportDataAccess" />
+		<property name="facilityService" ref="org.hisrc.azw.service.FacilityService" />
+		<property name="stationService" ref="org.hisrc.azw.service.StationService" />
+		<property name="facilityStateSnapshotService"
+			ref="org.hisrc.azw.service.FacilityStateSnapshotService" />
+	</bean>
+	
+	<bean name="org.hisrc.azw.service.FacilityStateWatcherService"
+		class="org.hisrc.azw.service.impl.DefaultFacilityStateWatcherService"
+		init-method="start">
+		<property name="facilityStateReportDataAccess"
+			ref="org.hisrc.azw.integration.FacilityStateReportDataAccess" />
+		<property name="facilityStateSnapshotService"
+			ref="org.hisrc.azw.service.FacilityStateSnapshotService" />
+		<property name="facilityStateChangedEventService" ref="org.hisrc.azw.service.FacilityStateChangedEventService"/>
+	</bean>
+
+	<bean name="org.hisrc.azw.service.FacilityStateReportFeatureService"
+		class="org.hisrc.azw.service.impl.DefaultFacilityStateReportFeatureService">
+		<property name="facilityService" ref="org.hisrc.azw.service.FacilityService" />
+		<property name="stationService" ref="org.hisrc.azw.service.StationService" />
+		<property name="facilityStateSnapshotService"
+			ref="org.hisrc.azw.service.FacilityStateSnapshotService" />
+	</bean>
+
+</beans>

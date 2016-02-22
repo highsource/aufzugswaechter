@@ -36,9 +36,7 @@ public class DefaultApiStationDataAccess implements StationDataAccess {
 					.findStationByStationNumber(stationnumber);
 			return asStation(s);
 		} catch (ApiException cause) {
-			// throw new
-			// IOException(MessageFormat.format("Error retrieving station with number [{0}].",
-			// stationnumber), cause);
+			// TODO distinguish not found vs. io ex
 			return null;
 		}
 	}

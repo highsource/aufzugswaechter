@@ -24,6 +24,12 @@
 		<constructor-arg index="0" value="aufzugswaechter" />
 		<constructor-arg index="1" value="recaptcha.properties" />
 	</bean>
+	
+	<bean name="s3://aufzugswaechter/gcm.properties" factory-bean="com.amazonaws.services.s3.AmazonS3Client"
+		factory-method="getObject">
+		<constructor-arg index="0" value="aufzugswaechter" />
+		<constructor-arg index="1" value="gcm.properties" />
+	</bean>
 
 	<bean name="java.util.Properties" class="java.util.Properties" />
 
@@ -53,29 +59,27 @@
 			</bean>
 		</property>
 	</bean>
+	
+	<bean name="java.util.Properties.load(gcm.properties)"
+		class="org.springframework.beans.factory.config.MethodInvokingBean">
+		<property name="targetObject" ref="java.util.Properties" />
+		<property name="targetMethod" value="load" />
+		<property name="arguments">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject" ref="s3://aufzugswaechter/gcm.properties" />
+				<property name="targetMethod" value="getObjectContent" />
+			</bean>
+		</property>
+	</bean>
 
 	<bean
 		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"
 		depends-on="java.util.Properties.load(twitter.properties)
-					java.util.Properties.load(recaptcha.properties)">
+					java.util.Properties.load(recaptcha.properties)
+					java.util.Properties.load(gcm.properties)">
 		<property name="properties" ref="java.util.Properties" />
 		<property name="ignoreUnresolvablePlaceholders" value="false" />
-	</bean>
-
-	<bean name="twitter:timeline/user"
-		class="org.apache.camel.component.twitter.TwitterEndpointDirect">
-		<constructor-arg index="0" value="twitter:timeline/user" />
-		<constructor-arg index="1">
-			<bean class="org.apache.camel.component.twitter.TwitterComponent" />
-		</constructor-arg>
-		<constructor-arg index="2">
-			<bean class="org.apache.camel.component.twitter.TwitterConfiguration">
-				<property name="accessToken" value="${twitter.accessToken}" />
-				<property name="accessTokenSecret" value="${twitter.accessTokenSecret}" />
-				<property name="consumerKey" value="${twitter.consumerKey}" />
-				<property name="consumerSecret" value="${twitter.consumerSecret}" />
-			</bean>
-		</constructor-arg>
 	</bean>
 
 </beans>

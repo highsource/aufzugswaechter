@@ -19,8 +19,7 @@ import org.hisrc.azw.model.FacilityState;
 import org.hisrc.azw.model.FacilityStateSnapshot;
 import org.hisrc.azw.service.FacilityStateSnapshotService;
 
-public class MemoryBasedFacilityStateSnapshotService implements
-		FacilityStateSnapshotService {
+public class MemoryBasedFacilityStateSnapshotService implements FacilityStateSnapshotService {
 
 	private static final Comparator<FacilityStateSnapshot> FACILITY_STATE_SNAPSHOT_COMPARATOR = new Comparator<FacilityStateSnapshot>() {
 		@Override
@@ -35,60 +34,53 @@ public class MemoryBasedFacilityStateSnapshotService implements
 			new HashMap<Long, TreeSet<FacilityStateSnapshot>>()) {
 		@Override
 		protected Set<FacilityStateSnapshot> createCollection() {
-			return new TreeSet<FacilityStateSnapshot>(
-					FACILITY_STATE_SNAPSHOT_COMPARATOR);
+			return new TreeSet<FacilityStateSnapshot>(FACILITY_STATE_SNAPSHOT_COMPARATOR);
 		}
 	};
 
 	@Override
 	public FacilityStateSnapshot findLastByEquipmentnumber(long equipmentnumber) {
-		final Iterator<FacilityStateSnapshot> iterator = this.facilityStateSnapshots
-				.get(equipmentnumber).iterator();
-		return iterator.hasNext() ? iterator.next() : null;
+		synchronized (this.facilityStateSnapshots) {
+			final Iterator<FacilityStateSnapshot> iterator = this.facilityStateSnapshots.get(equipmentnumber)
+					.iterator();
+			return iterator.hasNext() ? iterator.next() : null;
+		}
 	}
 
 	@Override
 	public void persistOrUpdate(FacilityStateSnapshot snapshot) {
 		Validate.notNull(snapshot);
-		this.facilityStateSnapshots
-				.put(snapshot.getEquipmentnumber(), snapshot);
+		synchronized (this.facilityStateSnapshots) {
+			this.facilityStateSnapshots.put(snapshot.getEquipmentnumber(), snapshot);
+		}
 	}
 
 	@Override
 	public Iterable<FacilityStateSnapshot> findAllLast() {
-		return findLastByFacilityStatesUpdatedSince(
-				Arrays.asList(FacilityState.values()), Long.MIN_VALUE);
+		return findLastByFacilityStatesUpdatedSince(Arrays.asList(FacilityState.values()), Long.MIN_VALUE);
 	}
 
 	@Override
-	public Iterable<FacilityStateSnapshot> findAllLastUpdatedSince(
+	public Iterable<FacilityStateSnapshot> findAllLastUpdatedSince(long timestamp) {
+		return findLastByFacilityStatesUpdatedSince(Arrays.asList(FacilityState.values()), timestamp);
+	}
+
+	@Override
+	public Iterable<FacilityStateSnapshot> findLastByFacilityStates(Iterable<FacilityState> facilityStates) {
+		return findLastByFacilityStatesUpdatedSince(facilityStates, Long.MIN_VALUE);
+	}
+
+	@Override
+	public Iterable<FacilityStateSnapshot> findLastByFacilityStatesUpdatedSince(Iterable<FacilityState> facilityStates,
 			long timestamp) {
-		return findLastByFacilityStatesUpdatedSince(
-				Arrays.asList(FacilityState.values()), timestamp);
-	}
-
-	@Override
-	public Iterable<FacilityStateSnapshot> findLastByFacilityStates(
-			Iterable<FacilityState> facilityStates) {
-		return findLastByFacilityStatesUpdatedSince(facilityStates,
-				Long.MIN_VALUE);
-	}
-
-	@Override
-	public Iterable<FacilityStateSnapshot> findLastByFacilityStatesUpdatedSince(
-			Iterable<FacilityState> facilityStates, long timestamp) {
-		final Set<FacilityState> states = new TreeSet<>(
-				IterableUtils.toList(facilityStates));
+		final Set<FacilityState> states = new TreeSet<>(IterableUtils.toList(facilityStates));
 		final List<FacilityStateSnapshot> snapshots = new LinkedList<>();
 		synchronized (facilityStateSnapshots) {
-			for (Entry<Long, Collection<FacilityStateSnapshot>> entry : facilityStateSnapshots
-					.asMap().entrySet()) {
-				final Iterator<FacilityStateSnapshot> iterator = entry
-						.getValue().iterator();
+			for (Entry<Long, Collection<FacilityStateSnapshot>> entry : facilityStateSnapshots.asMap().entrySet()) {
+				final Iterator<FacilityStateSnapshot> iterator = entry.getValue().iterator();
 				if (iterator.hasNext()) {
 					final FacilityStateSnapshot snapshot = iterator.next();
-					if (states.contains(snapshot.getState())
-							&& snapshot.getTimestamp() > timestamp) {
+					if (states.contains(snapshot.getState()) && snapshot.getTimestamp() > timestamp) {
 						snapshots.add(snapshot);
 					}
 				}

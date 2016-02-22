@@ -1,4 +1,4 @@
-package org.hisrc.azw.email.impl;
+package org.hisrc.azw.email.aws.sns;
 
 import java.text.MessageFormat;
 

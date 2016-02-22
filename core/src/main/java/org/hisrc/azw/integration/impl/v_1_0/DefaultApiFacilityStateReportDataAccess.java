@@ -13,6 +13,8 @@ import org.hisrc.azw.model.FacilityStateReport;
 import org.hisrc.azw.model.FacilityType;
 import org.hisrc.dbeac.client.v_1_0.api.DefaultApi;
 import org.hisrc.dbeac.client.v_1_0.invoker.ApiException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -20,7 +22,7 @@ import com.vividsolutions.jts.geom.Point;
 
 public class DefaultApiFacilityStateReportDataAccess implements FacilityStateReportDataAccess {
 
-	private GeometryFactory geometryFactory = new GeometryFactory();
+	private DefaultApiFacilityToFacilityStateReportConverter converter = new DefaultApiFacilityToFacilityStateReportConverter();
 
 	private DefaultApi api;
 
@@ -78,7 +80,7 @@ public class DefaultApiFacilityStateReportDataAccess implements FacilityStateRep
 			final List<org.hisrc.dbeac.client.v_1_0.model.Facility> fs = getApi().findFacilities(types, states);
 			final List<FacilityStateReport> facilityStateReports = new ArrayList<>(fs.size());
 			for (org.hisrc.dbeac.client.v_1_0.model.Facility f : fs) {
-				facilityStateReports.add(asFacilityStateReport(f));
+				facilityStateReports.add(converter.asFacilityStateReport(f));
 			}
 			return facilityStateReports;
 		} catch (ApiException cause) {
@@ -90,68 +92,11 @@ public class DefaultApiFacilityStateReportDataAccess implements FacilityStateRep
 	public FacilityStateReport findByEquipmentnumber(long equipmentnumber) throws IOException {
 		try {
 			org.hisrc.dbeac.client.v_1_0.model.Facility f = getApi().getFacilityByEquipmentNumber(equipmentnumber);
-			return asFacilityStateReport(f);
-		} catch (ApiException cause) {
-			// throw new IOException(
-			// MessageFormat.format(
-			// "Error retrieving facility with the equipment number [{0}].",
-			// equipmentnumber), cause);
+			return converter.asFacilityStateReport(f);
+		} catch (ApiException apiex) {
+			// TODO distinguish not found vs. io ex
 			return null;
 		}
-	}
-
-	private Facility asFacility(org.hisrc.dbeac.client.v_1_0.model.Facility e) {
-		final FacilityType facilityType;
-		switch (e.getType()) {
-		case ELEVATOR:
-			facilityType = FacilityType.ELEVATOR;
-			break;
-		case ESCALATOR:
-			facilityType = FacilityType.ESCALATOR;
-			break;
-		default:
-			facilityType = null;
-		}
-		final Double x = e.getGeocoordX();
-		final Double y = e.getGeocoordY();
-		final Point geometry;
-		if (x != null && y != null) {
-			geometry = geometryFactory.createPoint(new Coordinate(x, y));
-		} else {
-			geometry = null;
-		}
-		return new Facility(e.getEquipmentnumber(), facilityType, e.getDescription(), geometry, e.getStationnumber());
-	}
-
-	private double changeProbability = 0.01;
-
-	public double getChangeProbability() {
-		return changeProbability;
-	}
-
-	public void setChangeProbability(double changeProbability) {
-		this.changeProbability = changeProbability;
-	}
-
-	private FacilityStateReport asFacilityStateReport(org.hisrc.dbeac.client.v_1_0.model.Facility f) {
-
-		final Facility facility = asFacility(f);
-		final FacilityState facilityState;
-		final boolean shouldNotBeFaked = Math.random() >= getChangeProbability();
-		switch (f.getState()) {
-		case ACTIVE:
-			facilityState = shouldNotBeFaked ? FacilityState.ACTIVE : FacilityState.TEST_ACTIVE;
-			break;
-		case INACTIVE:
-			facilityState = shouldNotBeFaked ? FacilityState.INACTIVE : FacilityState.TEST_INACTIVE;
-			break;
-		case UNKNOWN:
-			facilityState = shouldNotBeFaked ? FacilityState.UNKNOWN : FacilityState.TEST_UNKNOWN;
-			break;
-		default:
-			facilityState = null;
-		}
-		return new FacilityStateReport(facility, facilityState);
 	}
 
 }

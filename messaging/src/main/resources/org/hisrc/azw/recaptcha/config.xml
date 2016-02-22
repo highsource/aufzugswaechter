@@ -11,38 +11,10 @@
         http://www.springframework.org/schema/util
         http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 
-	<import resource="classpath:/org/hisrc/azw/amazonaws/config.xml" />
+	<import resource="classpath:/org/hisrc/azw/config.xml" />
 	
-	<bean name="s3://aufzugswaechter/recaptcha.properties" factory-bean="com.amazonaws.services.s3.AmazonS3Client"
-		factory-method="getObject">
-		<constructor-arg index="0" value="aufzugswaechter" />
-		<constructor-arg index="1" value="recaptcha.properties" />
-	</bean>
-
-	<bean name="java.util.Properties[recaptcha.properties]" class="java.util.Properties" />
-
-	<bean name="java.util.Properties[recaptcha.properties].load"
-		class="org.springframework.beans.factory.config.MethodInvokingBean">
-		<property name="targetObject" ref="java.util.Properties[recaptcha.properties]" />
-		<property name="targetMethod" value="load" />
-		<property name="arguments">
-			<bean
-				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-				<property name="targetObject" ref="s3://aufzugswaechter/recaptcha.properties" />
-				<property name="targetMethod" value="getObjectContent" />
-			</bean>
-		</property>
-	</bean>
-
-	<bean
-		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"
-		depends-on="java.util.Properties[recaptcha.properties].load">
-		<property name="properties" ref="java.util.Properties[recaptcha.properties]" />
-		<property name="ignoreUnresolvablePlaceholders" value="false" />
-	</bean>
-	
-	<bean name="org.hisrc.azw.recaptcha.RecaptchaValidator"
-		class="org.hisrc.azw.recaptcha.impl.RestRecaptchaValidator">
+	<bean name="org.hisrc.recaptcha.RecaptchaValidator"
+		class="org.hisrc.recaptcha.rest.RestRecaptchaValidator">
 		<property name="recaptchaUrl" value="https://www.google.com/recaptcha/api/siteverify"/>
 		<property name="recaptchaSiteSecret" value="${recaptcha.siteSecret}"/>
 		<property name="restTemplate">

@@ -7,7 +7,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.Validate;
 import org.hisrc.azw.email.FacilityStateChangedEventEmailSubscriptionService;
-import org.hisrc.azw.recaptcha.RecaptchaValidator;
+import org.hisrc.recaptcha.RecaptchaValidator;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
