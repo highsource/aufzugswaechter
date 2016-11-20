@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.apache.commons.lang3.Validate;
 import org.hisrc.azw.integration.StationDataAccess;
 import org.hisrc.azw.model.Station;
-import org.hisrc.dbeac.client.v_1_0.api.DefaultApi;
-import org.hisrc.dbeac.client.v_1_0.invoker.ApiException;
+import org.hisrc.fasta.client.v1.api.DefaultApi;
+import org.hisrc.fasta.client.v1.invoker.ApiException;
 
 public class DefaultApiStationDataAccess implements StationDataAccess {
 
@@ -32,7 +32,7 @@ public class DefaultApiStationDataAccess implements StationDataAccess {
 	@Override
 	public Station findByStationnumber(long stationnumber) throws IOException {
 		try {
-			org.hisrc.dbeac.client.v_1_0.model.Station s = getApi()
+			org.hisrc.fasta.client.v1.model.Station s = getApi()
 					.findStationByStationNumber(stationnumber);
 			return asStation(s);
 		} catch (ApiException cause) {
@@ -41,7 +41,7 @@ public class DefaultApiStationDataAccess implements StationDataAccess {
 		}
 	}
 
-	private Station asStation(org.hisrc.dbeac.client.v_1_0.model.Station s) {
+	private Station asStation(org.hisrc.fasta.client.v1.model.Station s) {
 		final Station station = new Station(s.getStationnumber(), s.getName());
 		return station;
 	}

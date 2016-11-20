@@ -3,7 +3,7 @@
 	<groupId>org.hisrc.aufzugswaechter</groupId>
 	<artifactId>aufzugswaechter-web</artifactId>
 	<packaging>war</packaging>
-	<name>aufzugswaechter - Web</name>
+	<name>Aufzugswaechter - Web</name>
 	<parent>
 		<groupId>org.hisrc.aufzugswaechter</groupId>
 		<artifactId>aufzugswaechter-project</artifactId>

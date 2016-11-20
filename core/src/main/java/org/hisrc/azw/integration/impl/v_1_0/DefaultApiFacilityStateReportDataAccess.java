@@ -7,18 +7,11 @@ import java.util.List;
 
 import org.apache.commons.lang3.Validate;
 import org.hisrc.azw.integration.FacilityStateReportDataAccess;
-import org.hisrc.azw.model.Facility;
 import org.hisrc.azw.model.FacilityState;
 import org.hisrc.azw.model.FacilityStateReport;
 import org.hisrc.azw.model.FacilityType;
-import org.hisrc.dbeac.client.v_1_0.api.DefaultApi;
-import org.hisrc.dbeac.client.v_1_0.invoker.ApiException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
+import org.hisrc.fasta.client.v1.api.DefaultApi;
+import org.hisrc.fasta.client.v1.invoker.ApiException;
 
 public class DefaultApiFacilityStateReportDataAccess implements FacilityStateReportDataAccess {
 
@@ -77,9 +70,9 @@ public class DefaultApiFacilityStateReportDataAccess implements FacilityStateRep
 		}
 
 		try {
-			final List<org.hisrc.dbeac.client.v_1_0.model.Facility> fs = getApi().findFacilities(types, states);
+			final List<org.hisrc.fasta.client.v1.model.Facility> fs = getApi().findFacilities(types, states, null, null, null);
 			final List<FacilityStateReport> facilityStateReports = new ArrayList<>(fs.size());
-			for (org.hisrc.dbeac.client.v_1_0.model.Facility f : fs) {
+			for (org.hisrc.fasta.client.v1.model.Facility f : fs) {
 				facilityStateReports.add(converter.asFacilityStateReport(f));
 			}
 			return facilityStateReports;
@@ -91,7 +84,7 @@ public class DefaultApiFacilityStateReportDataAccess implements FacilityStateRep
 	@Override
 	public FacilityStateReport findByEquipmentnumber(long equipmentnumber) throws IOException {
 		try {
-			org.hisrc.dbeac.client.v_1_0.model.Facility f = getApi().getFacilityByEquipmentNumber(equipmentnumber);
+			org.hisrc.fasta.client.v1.model.Facility f = getApi().getFacilityByEquipmentNumber(equipmentnumber);
 			return converter.asFacilityStateReport(f);
 		} catch (ApiException apiex) {
 			// TODO distinguish not found vs. io ex

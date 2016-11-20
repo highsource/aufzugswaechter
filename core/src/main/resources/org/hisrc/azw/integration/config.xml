@@ -14,16 +14,16 @@
         http://www.directwebremoting.org/schema/spring-dwr
         http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd">
 
-	<import resource="classpath:/org/hisrc/dbeac/client/v_1_0/api/config.xml" />
+	<import resource="classpath:/org/hisrc/fasta/client/v1/api/config.xml" />
 
 	<bean name="org.hisrc.azw.integration.StationDataAccess"
 		class="org.hisrc.azw.integration.impl.v_1_0.DefaultApiStationDataAccess">
-		<property name="api" ref="org.hisrc.dbeac.client.v_1_0.api.DefaultApi" />
+		<property name="api" ref="org.hisrc.fasta.client.v1.api.DefaultApi" />
 	</bean>
 
 	<bean name="org.hisrc.azw.integration.FacilityStateReportDataAccess"
 		class="org.hisrc.azw.integration.impl.v_1_0.DefaultApiFacilityStateReportDataAccess">
-		<property name="api" ref="org.hisrc.dbeac.client.v_1_0.api.DefaultApi" />
+		<property name="api" ref="org.hisrc.fasta.client.v1.api.DefaultApi" />
 	</bean>
 
 </beans>

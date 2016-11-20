@@ -11,8 +11,8 @@
 	</parent>
 	<dependencies>
 		<dependency>
-			<groupId>org.hisrc.dbeac</groupId>
-			<artifactId>dbeac-client</artifactId>
+			<groupId>org.hisrc.fasta</groupId>
+			<artifactId>fasta-client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

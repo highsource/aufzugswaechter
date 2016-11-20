@@ -1,6 +1,9 @@
 package org.hisrc.azw.service.tests;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
+import java.util.Properties;
 
 import org.hisrc.azw.event.FacilityStateChangedEvent;
 import org.hisrc.azw.event.FacilityStateChangedEventListener;
@@ -18,7 +21,9 @@ import org.hisrc.azw.service.impl.DefaultFacilityStateWatcherService;
 import org.hisrc.azw.service.impl.MemoryBasedFacilityService;
 import org.hisrc.azw.service.impl.MemoryBasedFacilityStateSnapshotService;
 import org.hisrc.azw.service.impl.MemoryBasedStationService;
-import org.hisrc.dbeac.client.v_1_0.api.DefaultApi;
+import org.hisrc.fasta.client.v1.api.DefaultApi;
+import org.hisrc.fasta.client.v1.api.DefaultApiFactory;
+
 
 public class RunFacilityStateWatcherService {
 
@@ -26,6 +31,15 @@ public class RunFacilityStateWatcherService {
 
 		final RunFacilityStateWatcherService runner = new RunFacilityStateWatcherService();
 		runner.start();
+	}
+	
+	private Properties properties = new Properties();
+	{
+		try (InputStream is = getClass().getResourceAsStream("/fasta.properties")) {
+			properties.load(is);
+		} catch (IOException ioex) {
+			throw new ExceptionInInitializerError(ioex);
+		}
 	}
 
 	private final DefaultApi api;
@@ -40,7 +54,7 @@ public class RunFacilityStateWatcherService {
 	private final FacilityStateChangedEventListener stateChangedFacilitiesListener;
 
 	public RunFacilityStateWatcherService() {
-		this.api = new DefaultApi();
+		this.api = new DefaultApiFactory().createApi(properties.getProperty("fasta.accessToken"));
 		this.stationDataAccess = new DefaultApiStationDataAccess(this.api);
 		this.facilityStateSnapshotDataAccess = new DefaultApiFacilityStateReportDataAccess(this.api);
 

@@ -31,6 +31,12 @@
 		<constructor-arg index="1" value="gcm.properties" />
 	</bean>
 
+	<bean name="s3://aufzugswaechter/fasta.properties" factory-bean="com.amazonaws.services.s3.AmazonS3Client"
+		factory-method="getObject">
+		<constructor-arg index="0" value="aufzugswaechter" />
+		<constructor-arg index="1" value="fasta.properties" />
+	</bean>
+
 	<bean name="java.util.Properties" class="java.util.Properties" />
 
 	<bean name="java.util.Properties.load(recaptcha.properties)"
@@ -73,11 +79,25 @@
 		</property>
 	</bean>
 
+	<bean name="java.util.Properties.load(fasta.properties)"
+		class="org.springframework.beans.factory.config.MethodInvokingBean">
+		<property name="targetObject" ref="java.util.Properties" />
+		<property name="targetMethod" value="load" />
+		<property name="arguments">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject" ref="s3://aufzugswaechter/fasta.properties" />
+				<property name="targetMethod" value="getObjectContent" />
+			</bean>
+		</property>
+	</bean>
+
 	<bean
 		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"
 		depends-on="java.util.Properties.load(twitter.properties)
 					java.util.Properties.load(recaptcha.properties)
-					java.util.Properties.load(gcm.properties)">
+					java.util.Properties.load(gcm.properties)
+					java.util.Properties.load(fasta.properties)">
 		<property name="properties" ref="java.util.Properties" />
 		<property name="ignoreUnresolvablePlaceholders" value="false" />
 	</bean>

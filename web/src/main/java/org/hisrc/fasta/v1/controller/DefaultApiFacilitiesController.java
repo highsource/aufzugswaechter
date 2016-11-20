@@ -1,4 +1,4 @@
-package org.hisrc.dbeac.v_1_0.controller;
+package org.hisrc.fasta.v1.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import org.apache.commons.lang3.Validate;
 import org.hisrc.azw.integration.impl.v_1_0.DefaultApiFacilityToFacilityStateReportConverter;
 import org.hisrc.azw.model.FacilityStateReport;
 import org.hisrc.azw.service.FacilityStateChangedEventService;
-import org.hisrc.dbeac.client.v_1_0.model.Facility;
+import org.hisrc.fasta.client.v1.model.Facility;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

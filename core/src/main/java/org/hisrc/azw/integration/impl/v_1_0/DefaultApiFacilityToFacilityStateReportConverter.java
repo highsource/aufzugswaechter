@@ -23,7 +23,7 @@ public class DefaultApiFacilityToFacilityStateReportConverter {
 //		this.changeProbability = changeProbability;
 //	}
 //
-	public FacilityStateReport asFacilityStateReport(org.hisrc.dbeac.client.v_1_0.model.Facility f) {
+	public FacilityStateReport asFacilityStateReport(org.hisrc.fasta.client.v1.model.Facility f) {
 
 		final Facility facility = asFacility(f);
 		final FacilityState facilityState;
@@ -37,16 +37,16 @@ public class DefaultApiFacilityToFacilityStateReportConverter {
 		case INACTIVE:
 			facilityState = shouldNotBeFaked ? FacilityState.INACTIVE : FacilityState.TEST_INACTIVE;
 			break;
-		case UNKNOWN:
-			facilityState = shouldNotBeFaked ? FacilityState.UNKNOWN : FacilityState.TEST_UNKNOWN;
-			break;
+//		case UNKNOWN:
+//			facilityState = shouldNotBeFaked ? FacilityState.UNKNOWN : FacilityState.TEST_UNKNOWN;
+//			break;
 		default:
 			facilityState = null;
 		}
 		return new FacilityStateReport(facility, facilityState);
 	}
 
-	private Facility asFacility(org.hisrc.dbeac.client.v_1_0.model.Facility e) {
+	private Facility asFacility(org.hisrc.fasta.client.v1.model.Facility e) {
 		final FacilityType facilityType;
 		switch (e.getType()) {
 		case ELEVATOR:
