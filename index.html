@@ -114,33 +114,82 @@
 					<div class="modal-body">
 						<ul class="nav nav-tabs" id="aboutTabs">
 							<li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-question-circle"></i>&nbsp;About the project</a></li>
-							<li><a href="#disclaimer" data-toggle="tab"><i class="fa fa-exclamation-circle"></i>&nbsp;Disclaimer</a></li>
+							<li><a href="#datasources" data-toggle="tab"><i class="fa fa-info-circle"></i>&nbsp;Data sources</a></li>
 							<li><a href="#impressum" data-toggle="tab"><i class="fa fa-info-circle"></i>&nbsp;Impressum</a></li>
 						</ul>
 						<div class="tab-content" id="aboutTabsContent">
 							<div class="tab-pane fade active in" id="about">
-								<p>TODO Project description.</p>
-								<!--div class="panel panel-primary">
-									<div class="panel-heading">Features</div>
-									<ul class="list-group">
-										<li class="list-group-item">Fullscreen mobile-friendly map template with responsive navbar and modal placeholders</li>
-										<li class="list-group-item">jQuery loading of external GeoJSON files</li>
-										<li class="list-group-item">Logical multiple layer marker clustering via the <a href="https://github.com/Leaflet/Leaflet.markercluster" target="_blank">leaflet marker cluster plugin</a></li>
-										<li class="list-group-item">Elegant client-side multi-layer feature search with autocomplete using <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a></li>
-										<li class="list-group-item">Responsive sidebar feature list synced with map bounds, which includes sorting and filtering via <a href="http://listjs.com/" target="_blank">list.js</a></li>
-										<li class="list-group-item">Marker icons included in grouped layer control via the <a href="https://github.com/ismyrnow/Leaflet.groupedlayercontrol" target="_blank">grouped layer control plugin</a></li>
-									</ul>
-								</div-->
+							
+<h1>About the project</h1>
+
+<p>Auzugswächter (roughly translated as "the elevator watcher" from German) is a service which monitors the status of elevators and escalators on the stations on the stations managed by the DB Station&amp;Service AG.</p>
+
+<p>You can check the status of facilities on the map, check them on Twitter from <a href="https://twitter.com/aufzugswaechter">@aufzugswaechter</a>, or subscribe to certain facility via e-mail or as push messages via <a href="https://github.com/highsource/aufzugswaechter-android-app">Android app</a>.</p>
+
+<p>Aufzugswächter monitors status of facilities by regularly querying the <a href="https://developer.deutschebahn.com/store/apis/info?name=FaSta-Station_Facilities_Status&version=v1&provider=DBOpenData">FaSta API</a> provided by the DB Station&amp;Service AG.<br/>
+If a facility changes the status, this triggers a tweet as well as e-mail and push message to users which subsribed to this facility.</p>  
+
+<p>For more information, please see <a href="https://de.slideshare.net/orless/aufzugswchter">the following presentation</a>.</p>
+							
 							</div>
-							<div id="disclaimer" class="tab-pane fade text-danger">
-								<p>TODO Disclaimer.</p>
-								<p>The data provided on this site is for informational and planning purposes only.</p>
-								<p>Absolutely no accuracy or completeness guarantee is implied or intended. All information on this map is subject to such variations and corrections as might result from a complete title search and/or accurate field survey.</p>
+							<div id="datasources" class="tab-pane fade">
+<h1>Datasources</h1>
+
+<p>This project was made possible thanks to the APIs and datasets published by the DB Station&amp;Service AG on the <a href="http://data.deutschebahn.com">DB Open Data Portal</a> as well as <a href="https://developer.deutschebahn.com">DB API Portal</a>.
+
+<h2>Facility data</h2>
+
+<p>Facility data is provided by the <a href="https://developer.deutschebahn.com/store/apis/info?name=FaSta-Station_Facilities_Status&version=v1&provider=DBOpenData">FaSta API</a>, licensed under <a href="https://developer.deutschebahn.com/store/site/pages/doc-viewer.jag?docName=Lizenzbestimmungen%20und%20Haftungsausschluss&name=FaSta-Station_Facilities_Status&version=v1&provider=DBOpenData">CC BY 4.0</a>.</p>
+
+<p>DB Station&amp;Service AG overtakes no responsibility and gives no guarantee for the completeness, correctness or accuracy of the data.</p>
+
+<h2>Map data</h2>
+
+<p>Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, licensed under <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>.</p>
+
 							</div>
 							<div id="impressum" class="tab-pane fade">
-								<p>TODO Impressum.</p>
-								<p>The data provided on this site is for informational and planning purposes only.</p>
-								<p>Absolutely no accuracy or completeness guarantee is implied or intended. All information on this map is subject to such variations and corrections as might result from a complete title search and/or accurate field survey.</p>
+<h1>Impressum</h1>
+
+<p>Dies ist eine private Webseite, ermöglicht durch von der Deutsche Bahn bereitgestellte offene Daten von <a href="http://data.deutschebahn.com">data.deutschebahn.com</a>.</p>
+
+<h2>Angaben gemäß § 5 Telemediengesetz (TMG)</h2>
+
+<p>Alexey Valikov<br/>
+Josef-Baumann-Str. 13<br/>
+61352 Bad Homburg<br/>
+Deutschland</p>
+
+<h2>Kontakt</h2>
+<p>Tel.: +49 176 48160160<br/>
+E-Mail: valikov@gmx.net</p>
+
+<h2>Verantwortlicher für den Inhalt ist gemäß § 55 Abs. 2 Rundfunkstaatsvertrag (RStV)</h2>
+<p>Alexey Valikov<br/>
+Josef-Baumann-Str. 13<br/>
+61352 Bad Homburg</p>
+
+<h1>Haftungsausschluss</h1>
+
+<h2>Haftung für die Inhalte</h2>
+<p>Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.</p>
+<p>Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+<p>Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
+
+<h2>Haftung für Links</h2>
+<p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
+<p>Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
+
+<h2>Urheberrecht</h2>
+<p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
+<p>Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>
+
+<h2>Datenschutz</h2>
+<p>Diese Webseite kann ohne Angabe der personenbezogenen Daten genutzt werden. Falls solche Daten (z.B. E-Mail) doch erhoben werden sollten, geschieht das, freiwillig oder nur mit ausdrücklicher Zustimmung durch Sie und durch uns zu verbergen.</p>
+<p>Wenn eine Anlage per E-Mail abonniert wird, wird das Abonnement bei <a href="https://aws.amazon.com">Amazon Web Services</a> gespeichert.</p>
+<p>Wenn eine Anlage per Push-Nachricht abonniert wird, wird das Abonnement bei bei <a href="https://developers.google.com/cloud-messaging/">Google Cloud Messaging</a> gespeichert.</p>
+<p>Informationen über die Abonnements werden nicht bewusst an Dritte weitergegeben. Es wird allerdings nicht garantiert dass es den Dritten niemals gelingt, Zugriff auf die Abonnements zu verschaffen (z.B. als Ergebnis des Hacker-Angriffs).</p> 
+
 							</div>
 						</div>
 					</div>
