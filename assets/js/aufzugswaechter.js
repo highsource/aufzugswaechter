@@ -2,8 +2,9 @@ var map = L.map('map').setView([51.5, 10.5], 6);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoib3JsZXNzIiwiYSI6ImNpaXg4cGt2cTAwMGh2Mm01ZDlqYnk5N28ifQ.EDKxdytV0xTiHyI16K0zsg', {
 	maxZoom: 18,
-	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-		'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+	attribution:
+		'<a href="https://developer.deutschebahn.com/store/apis/info?name=FaSta-Station_Facilities_Status&version=v1&provider=DBOpenData">Facility data</a> &copy; DB Station&amp;Service AG, <a href="https://developer.deutschebahn.com/store/site/pages/doc-viewer.jag?docName=Lizenzbestimmungen%20und%20Haftungsausschluss&name=FaSta-Station_Facilities_Status&version=v1&provider=DBOpenData">CC BY 4.0</a> | ' +
+		'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a> | ' +
 		'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>',
 	id: 'mapbox.streets'
 }).addTo(map);
